@@ -68,6 +68,7 @@ public class ExampleUnitTest {
             Path[] paths = t.getPaths();
             for(Path p:paths) {
                 Assert.assertTrue(p.getFirstPoint().equals(t));
+                Assert.assertTrue(!p.getLastPoint().equals(t));
                 boolean inPoints = false;
                 for(TransferPoint t2:points) {
                     if(p.getLastPoint().equals(t2)) {
