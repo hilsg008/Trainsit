@@ -1,5 +1,7 @@
 package com.example.newmapsapp;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -55,6 +57,41 @@ public class ExampleUnitTest {
             for(Path p: paths) {
                 Assert.assertTrue(p.isInitialized);
                 Assert.assertTrue(p.getCost() > 0);
+            }
+        }
+    }
+
+    @Test
+    public void transferPointPathsStartAndEndAtTransferPoints() {
+        TransferPoint[] points = TransferPointBuilder.getTransferPoints(getRoutes());
+        for(TransferPoint t:points) {
+            Path[] paths = t.getPaths();
+            for(Path p:paths) {
+                Assert.assertTrue(p.getFirstPoint().equals(t));
+                boolean inPoints = false;
+                for(TransferPoint t2:points) {
+                    if(p.getLastPoint().equals(t2)) {
+                        inPoints = true;
+                    }
+                }
+                Assert.assertTrue(inPoints);
+            }
+        }
+    }
+
+    @Test
+    public void transferPointsContainPoints() {
+        TransferPoint[] points = TransferPointBuilder.getTransferPoints(getRoutes());
+        for(TransferPoint t:points) {
+            System.out.println(t);
+            System.out.println(t.fromPoint());
+            Path[] p = t.getPaths();
+            for(Path path:p) {
+                System.out.println(path);
+                LatLng[] latLngs = path.getPoints();
+                for(LatLng l: latLngs) {
+                    System.out.println(l);
+                }
             }
         }
     }
