@@ -105,11 +105,6 @@ public class TransferPointBuilder {
         return t;
     }
 
-    static Route[][] addRoutesTogether(Route[][] r1, Route[][] r2) {
-        r1 = Arrays.copyOf(r1, r1.length+r2.length);
-        return r1;
-    }
-
     /**
      * Adds points specified by indexes to t
      * @param t TransferPoint[] to put points into
@@ -121,29 +116,29 @@ public class TransferPointBuilder {
     static TransferPoint[] addPoints(TransferPoint[] t, Location[] stops, int[] indexes, int indexToStartAt) {
         if(indexes.length == 1) {
             t[indexToStartAt] = new TransferPoint(new Path(), new Path[]{
-                    new Path(new Route[][]{{new Route(Arrays.copyOfRange(stops, 0, indexes[0]))}}),
+                    new Path(new Route[][]{{new Route(invertStops(Arrays.copyOfRange(stops, 0, indexes[0]+1)))}}),
                     new Path(new Route[][]{{new Route(Arrays.copyOfRange(stops, indexes[0], stops.length))}})},
-                    stops[indexes[0]].getX(), stops[indexes[0]].getY());
+                        stops[indexes[0]].getX(), stops[indexes[0]].getY());
             t[indexToStartAt].removeEmptyPaths();
             return t;
         }
         t[indexToStartAt] = new TransferPoint(new Path(), new Path[]{
-            new Path(new Route[][]{{new Route(Arrays.copyOfRange(stops, 0, indexes[0]))}}),
-            new Path(new Route[][]{{new Route(Arrays.copyOfRange(stops, indexes[0], indexes[1]))}})},
-            stops[indexes[0]].getX(), stops[indexes[0]].getY());
+            new Path(new Route[][]{{new Route(invertStops(Arrays.copyOfRange(stops, 0, indexes[0]+1)))}}),
+            new Path(new Route[][]{{new Route(Arrays.copyOfRange(stops, indexes[0], indexes[1]+1))}})},
+                stops[indexes[0]].getX(), stops[indexes[0]].getY());
         t[indexToStartAt].removeEmptyPaths();
         for(int i=1; i<indexes.length-1; i++) {
             t[indexToStartAt+i] = new TransferPoint(new Path(), new Path[]{
-                new Path(new Route[][]{{new Route(Arrays.copyOfRange(stops, indexes[i], indexes[i+1]))}}),
-                new Path(new Route[][]{{new Route(Arrays.copyOfRange(stops, indexes[i-1], indexes[i]))}})},
+                new Path(new Route[][]{{new Route(Arrays.copyOfRange(stops, indexes[i], indexes[i+1]+1))}}),
+                new Path(new Route[][]{{new Route(invertStops(Arrays.copyOfRange(stops, indexes[i-1], indexes[i]+1)))}})},
                     stops[indexes[i]].getX(), stops[indexes[i]].getY());
             t[indexToStartAt+i].removeEmptyPaths();
         }
         int temp = indexes.length-1;
         t[indexToStartAt+temp] = new TransferPoint(new Path(), new Path[]{
             new Path(new Route[][]{{new Route(Arrays.copyOfRange(stops, indexes[temp], stops.length))}}),
-            new Path(new Route[][]{{new Route(Arrays.copyOfRange(stops, indexes[temp-1], indexes[temp]))}})},
-            stops[indexes[0]].getX(), stops[indexes[0]].getY());
+            new Path(new Route[][]{{new Route(invertStops(Arrays.copyOfRange(stops, indexes[temp-1], indexes[temp]+1)))}})},
+                stops[indexes[temp]].getX(), stops[indexes[temp]].getY());
         t[indexToStartAt+temp].removeEmptyPaths();
         return t;
     }
@@ -189,15 +184,6 @@ public class TransferPointBuilder {
             result[i] = ints.get(i);
         }
         return result;
-    }
-
-    static boolean containsLocation(ArrayList<Location> points, Location loc) {
-        for(Location t:points) {
-            if(loc.equals(t)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     static TransferPoint[] removeDuplicatePoints(ArrayList<TransferPoint> locs) {

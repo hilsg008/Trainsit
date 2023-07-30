@@ -108,10 +108,9 @@ public class TransferPoint extends Location implements Comparable<TransferPoint>
                 s+= ", ";
             }
             Location[] stops = paths[0].getRoutes()[0][0].getStops();
-            s+= getLocation();
             for(Location l: stops) {
-                s+=", ";
                 s+= l;
+                s+=", ";
             }
             return s;
         }

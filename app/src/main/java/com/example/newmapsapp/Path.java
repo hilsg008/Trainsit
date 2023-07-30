@@ -50,6 +50,13 @@ public class Path {
     }
 
     /**
+     * @return The location of the first point in this path.
+     */
+    public Location getFirstPoint() {
+        return routes[0][0].getStartOfRoute();
+    }
+
+    /**
      * Combines the routes of the paths starting at this and continuing with p.
      * @param p to be added to the end of this path
      * @return combined path
