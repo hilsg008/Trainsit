@@ -6,6 +6,7 @@ import java.util.Arrays;
 public class PathBuilder {
 
     private TransferPoint[] transferPoints;
+    private int[] costFromTransferPoints;
 
     /*
      * Builds a path from a location to another location.
@@ -13,56 +14,61 @@ public class PathBuilder {
      */
     public PathBuilder(TransferPoint[] t) {
         transferPoints = t;
+        costFromTransferPoints = new int[transferPoints.length];
     }
 
     public Path[] getPaths(Location start, Location goal) throws PathNotFoundException {
+        //Initializes the array of costs from each point (-1 if unknown, -2 if already searched)
+        Arrays.fill(costFromTransferPoints, -1);
+        //Initialize all costs
+        for(TransferPoint t:transferPoints) {
+            t.initializeCosts(goal);
+        }
         //Find nearest transfer point to start
         int nearestPointIndex = getNearestPoint(start);
         TransferPoint nearestPoint = transferPoints[nearestPointIndex];
 
-        //Add the walk to that point as the first route in any path
-        Route[][] walkToTransferPoint = new Route[1][1];
-        walkToTransferPoint[0][0] = new Route(new Location[]{start, nearestPoint});
+        //Add the walk to that point as the first route
+        if(!start.equals(nearestPoint)) {
+            Route[][] walkToTransferPoint = new Route[1][1];
+            walkToTransferPoint[0][0] = new Route(new Location[]{start, nearestPoint});
+            nearestPoint.setPathToPoint(new Path(walkToTransferPoint));
+        } else {
+            nearestPoint.setPathToPoint(new Path());
+        }
 
-        //Initializes the array of costs from each point (-1 if unknown, -2 if already searched)
-        int[] costFromTransferPoints = new int[transferPoints.length];
-        Arrays.fill(costFromTransferPoints, -1);
         costFromTransferPoints[nearestPointIndex] = nearestPoint.getCost(start);
-
         //Finds the next point to search from our first point
-        int indexOfNextPoint = getNextPoint(costFromTransferPoints);
-        TransferPoint nextPointSearched = transferPoints[indexOfNextPoint];
-        nextPointSearched.pathToPoint = new Path(walkToTransferPoint);
+        int indexOfPointSearched, indexOfPointFound;
+        TransferPoint nextPointSearched, nextPointFound;
+
 
         //Store the list of complete paths to goal.
         ArrayList<Path> methodsFound = new ArrayList<>();
         while(methodsFound.size() < 3) {
-            //If the nextPoint the goal, we found a path to the goal
-            if(nextPointSearched.equals(goal)) {
-                methodsFound.add(nextPointSearched.pathToPoint);
-            } else {
-                //Get lowest cost path from our nextPoint
-                Path p = nextPointSearched.getNextPath();
-                //Store the new cost from that transferPoint
-                costFromTransferPoints[indexOfNextPoint] = nextPointSearched.getLowestCost();
-
-                //Find the next point in this path
-                indexOfNextPoint = indexOfPointFromPath(p);
-                if(indexOfNextPoint != -1) {
-                    //Store this new point and its lowest cost path
-                    nextPointSearched = transferPoints[indexOfNextPoint];
-                    costFromTransferPoints[indexOfNextPoint] = nextPointSearched.getLowestCost();
-                    nextPointSearched.pathToPoint = p;
+            indexOfPointSearched = getNextPoint(costFromTransferPoints);
+            nextPointSearched = transferPoints[indexOfPointSearched];
+            Path pathToNewPoint = nextPointSearched.getNextPath();
+            indexOfPointFound = indexOfPointFromPath(pathToNewPoint);
+            if(indexOfPointFound > -1) {
+                nextPointFound = transferPoints[indexOfPointFound];
+                //Store the path to the goal and do not update costFromTransferPoints.
+                //Mainly so indexOfPointFromPath won't return -2, and so we won't search from goal.
+                if(nextPointFound.equals(goal)) {
+                    methodsFound.add(pathToNewPoint);
+                } else {
+                    nextPointFound.setPathToPoint(pathToNewPoint);
+                    costFromTransferPoints[indexOfPointFound] = nextPointFound.getLowestCost();
                 }
-                //If there are no new points to search
-                else {
-                    //If there are no ways to get to the goal
-                    if(methodsFound.size() == 0) {
-                        throw new PathNotFoundException(start, goal);
-                    }
+            }
+            else if(indexOfPointFound == -1) {
+                if(methodsFound.size() == 0) {
+                    throw new PathNotFoundException(start, goal);
+                } else {
                     return methodsFound.toArray(new Path[methodsFound.size()]);
                 }
             }
+            costFromTransferPoints[indexOfPointSearched] = nextPointSearched.getLowestCost();
         }
         return methodsFound.toArray(new Path[methodsFound.size()]);
     }
@@ -91,12 +97,15 @@ public class PathBuilder {
 
     /**
      * Assuming the end of the path is a transfer point, finds that point
-     * @return index of TransferPoint
+     * @return if it's a new point, index of TransferPoint, else -2.
      */
     public int indexOfPointFromPath(Path p) {
         Location lastPoint = p.getLastPoint();
         for(int i=0; i<transferPoints.length; i++) {
             if (transferPoints[i].equals(lastPoint)) {
+                if(costFromTransferPoints[i] != -1) {
+                    return -2;
+                }
                 return i;
             }
         }
@@ -108,7 +117,7 @@ public class PathBuilder {
      * @param costs cost to each frontier point. -1 if not searched. -2 if searched.
      * @return index in costs
      */
-    public int getNextPoint(int[] costs) {
+    public int getNextPoint(int[] costs) throws PathNotFoundException {
         int val = Integer.MAX_VALUE;
         for(int cost:costs) {
             if(cost > -1 && cost < val) {
@@ -121,6 +130,6 @@ public class PathBuilder {
             }
         }
         //Should never get to this point unless there are zero transfer points.
-        return -1;
+        throw new PathNotFoundException();
     }
 }

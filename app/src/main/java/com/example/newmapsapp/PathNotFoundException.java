@@ -8,4 +8,8 @@ public class PathNotFoundException extends Exception {
     public PathNotFoundException(float x, float y) {
         super("Path Not Found At " + x + ", " + y + ".");
     }
+
+    public PathNotFoundException() {
+        super("TransferPoints are empty");
+    }
 }
