@@ -7,19 +7,32 @@ import java.util.Arrays;
  * When a TransferPoint is != null then it has been expanded.
  */
 public class TransferPoint extends Location implements Comparable<TransferPoint> {
-    private int[] costs;
     private Path[] paths;
+    private int[] costs;
     private int costToPoint;
-    public Path pathToPoint;
+    private Path pathToPoint;
+    private boolean isInitialized;
+    private Location goal;
     public TransferPoint(Path pathToThisPoint, Path[] pathsFromPoint, float x, float y) {
         super(x,y);
         paths = pathsFromPoint;
         pathToPoint = pathToThisPoint;
         costToPoint = pathToPoint.getCost();
-        costs = new int[pathsFromPoint.length];
+        isInitialized = false;
+        costs = new int[paths.length];
+    }
+
+    public void initializeCosts(Location goalLocation) {
+        isInitialized = true;
+        goal = goalLocation;
         for(int i=0; i<costs.length; i++) {
-            costs[i] = costToPoint + pathsFromPoint[i].getCost();
+            costs[i] = costToPoint + paths[i].getCost() + paths[i].getLastPoint().getCost(goal);
         }
+    }
+
+    public void setPathToPoint(Path p) {
+        pathToPoint = p;
+        initializeCosts(goal);
     }
 
     /**
@@ -28,9 +41,9 @@ public class TransferPoint extends Location implements Comparable<TransferPoint>
      */
     public int getLowestCost() {
         int val = Integer.MAX_VALUE;
-        for(int cost:costs) {
-            if(cost < val) {
-                val = cost;
+        for(int i=0; i<costs.length; i++) {
+            if(costs[i] < val) {
+                val = costs[i];
             }
         }
         return val;
@@ -38,23 +51,12 @@ public class TransferPoint extends Location implements Comparable<TransferPoint>
 
     public void removeEmptyPaths() {
         ArrayList<Path> result = new ArrayList<>();
-        ArrayList<Integer> newCosts = new ArrayList<>();
-        for(int i=0; i<costs.length; i++) {
-            if(costs[i] != 0 && paths[i].isInitialized) {
+        for(int i=0; i<paths.length; i++) {
+            if(paths[i].getCost() != 0 && paths[i].isInitialized) {
                 result.add(paths[i]);
-                newCosts.add(costs[i]);
             }
         }
         paths = result.toArray(new Path[result.size()]);
-        costs = intArrayListToPrimitive(newCosts);
-    }
-
-    private static int[] intArrayListToPrimitive(ArrayList<Integer> ints) {
-        int[] result = new int[ints.size()];
-        for(int i=0; i<result.length; i++) {
-            result[i] = ints.get(i);
-        }
-        return result;
     }
 
     public Path[] getPaths() {
@@ -77,24 +79,33 @@ public class TransferPoint extends Location implements Comparable<TransferPoint>
      */
     public Path getNextPath() throws PathNotFoundException {
         int lowest = getLowestCost();
-        if(costs.length == 0){
+        if(paths.length == 0){
             throw new PathNotFoundException(getX(), getY());
         } else {
-            int[] newCosts = new int[costs.length-1];
-            int j=0;
             Path p = new Path();
             for(int i=0; i<costs.length; i++) {
                 if(costs[i] == lowest && !p.isInitialized) {
                     p = paths[i];
-                    j--;
-                } else {
-                    newCosts[j] = costs[i];
+                    removePath(i);
                 }
-                j++;
             }
-            costs = newCosts;
             return pathToPoint.add(p);
         }
+    }
+
+    private void removePath(int index) {
+        Path[] result = new Path[paths.length-1];
+        int[] newCosts = new int[costs.length-1];
+        int j=0;
+        for(int i=0; i<paths.length; i++) {
+            if(i != index) {
+                result[j] = paths[i];
+                newCosts[j] = costs[i];
+                j++;
+            }
+        }
+        paths = result;
+        costs = newCosts;
     }
 
     public String fromPoint() {
