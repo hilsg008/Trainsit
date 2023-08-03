@@ -55,27 +55,9 @@ public class ExampleUnitTest {
         for(TransferPoint t:points) {
             Path[] paths = t.getPaths();
             for(Path p: paths) {
+                Assert.assertTrue(!p.getFirstPoint().equals(p.getLastPoint()));
                 Assert.assertTrue(p.isInitialized);
                 Assert.assertTrue(p.getCost() > 0);
-            }
-        }
-    }
-
-    @Test
-    public void transferPointPathsStartAndEndAtTransferPoints() {
-        TransferPoint[] points = TransferPointBuilder.getTransferPoints(getRoutes());
-        for(TransferPoint t:points) {
-            Path[] paths = t.getPaths();
-            for(Path p:paths) {
-                Assert.assertTrue(p.getFirstPoint().equals(t));
-                Assert.assertTrue(!p.getLastPoint().equals(t));
-                boolean inPoints = false;
-                for(TransferPoint t2:points) {
-                    if(p.getLastPoint().equals(t2)) {
-                        inPoints = true;
-                    }
-                }
-                Assert.assertTrue(inPoints);
             }
         }
     }
@@ -98,15 +80,41 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void testTransferPoints() {
+    public void transferPointPathsStartAndEndAtTransferPoints() {
         TransferPoint[] points = TransferPointBuilder.getTransferPoints(getRoutes());
+        for(TransferPoint t:points) {
+            Path[] paths = t.getPaths();
+            for(Path p:paths) {
+                Assert.assertTrue(p.getFirstPoint().equals(t));
+                Assert.assertTrue(!p.getLastPoint().equals(t));
+                Assert.assertTrue(p.getCost() > 0);
+                boolean inPoints = false;
+                for(TransferPoint t2:points) {
+                    if(p.getLastPoint().equals(t2)) {
+                        inPoints = true;
+                    }
+                }
+                Assert.assertTrue(inPoints);
+            }
+        }
+    }
+
+    @Test
+    public void transferPointsDoNotContainDuplicatePaths() {
+
+    }
+
+    @Test
+    public void testTransferPoints() {
         ArrayList<Location> locs = new ArrayList<>();
         Location[] l2 = getLocations();
         for(Location l: l2) {
             locs.add(l);
         }
-        PathBuilder p = new PathBuilder(points);
+        PathBuilder p;
         while(locs.size() > 1) {
+            TransferPoint[] points = TransferPointBuilder.getTransferPoints(getRoutes());
+            p = new PathBuilder(points);
             Location start = locs.remove((int)(Math.random()*locs.size()));
             Location end = locs.remove((int)(Math.random()*locs.size()));
             System.out.println("Start: " + start + " End: " + end);
