@@ -47,8 +47,16 @@ public class PathBuilder {
         ArrayList<Path> methodsFound = new ArrayList<>();
         while(methodsFound.size() < 3) {
             indexOfPointSearched = getNextPoint(costFromTransferPoints);
+            if(indexOfPointSearched == -1) {
+                if(methodsFound.size() == 0) {
+                    throw new PathNotFoundException(start, goal);
+                } else {
+                    return methodsFound.toArray(new Path[methodsFound.size()]);
+                }
+            }
             nextPointSearched = transferPoints[indexOfPointSearched];
             Path pathToNewPoint = nextPointSearched.getNextPath();
+            costFromTransferPoints[indexOfPointSearched] = nextPointSearched.getLowestCost();
             indexOfPointFound = indexOfPointFromPath(pathToNewPoint);
             if(indexOfPointFound > -1) {
                 nextPointFound = transferPoints[indexOfPointFound];
@@ -129,7 +137,6 @@ public class PathBuilder {
                 return i;
             }
         }
-        //Should never get to this point unless there are zero transfer points.
-        throw new PathNotFoundException();
+        return -1;
     }
 }
