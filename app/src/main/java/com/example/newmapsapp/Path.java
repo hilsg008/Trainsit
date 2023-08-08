@@ -1,5 +1,8 @@
 package com.example.newmapsapp;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /*
@@ -30,8 +33,16 @@ public class Path {
         }
     }
 
-    public void removeEmptyRoutes() {
-
+    public LatLng[] getPoints() {
+        ArrayList<LatLng> result = new ArrayList<>();
+        for(Route[] r: routes) {
+            Location[] stops = r[0].getStops();
+            for(Location l:stops) {
+                result.add(l.toLatLng());
+            }
+            System.out.println(result);
+        }
+        return result.toArray(new LatLng[result.size()]);
     }
 
     public Route[][] getRoutes() {

@@ -40,6 +40,9 @@ public class TransferPoint extends Location implements Comparable<TransferPoint>
      * @return lowest cost
      */
     public int getLowestCost() {
+        if(costs.length == 0) {
+            return -2;
+        }
         int val = Integer.MAX_VALUE;
         for(int i=0; i<costs.length; i++) {
             if(costs[i] < val) {
