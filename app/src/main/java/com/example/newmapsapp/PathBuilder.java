@@ -46,6 +46,10 @@ public class PathBuilder {
         //Store the list of complete paths to goal.
         ArrayList<Path> methodsFound = new ArrayList<>();
         while(methodsFound.size() < 3) {
+            for(int i=0; i< costFromTransferPoints.length; i++) {
+                System.out.print(costFromTransferPoints[i] + ", ");
+            }
+            System.out.println();
             indexOfPointSearched = getNextPoint(costFromTransferPoints);
             if(indexOfPointSearched == -1) {
                 if(methodsFound.size() == 0) {
@@ -69,14 +73,6 @@ public class PathBuilder {
                     costFromTransferPoints[indexOfPointFound] = nextPointFound.getLowestCost();
                 }
             }
-            else if(indexOfPointFound == -1) {
-                if(methodsFound.size() == 0) {
-                    throw new PathNotFoundException(start, goal);
-                } else {
-                    return methodsFound.toArray(new Path[methodsFound.size()]);
-                }
-            }
-            costFromTransferPoints[indexOfPointSearched] = nextPointSearched.getLowestCost();
         }
         return methodsFound.toArray(new Path[methodsFound.size()]);
     }
