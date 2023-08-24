@@ -79,10 +79,14 @@ public class ExampleClasses {
         Comparator<Location> comparator = new Comparator<Location>() {
             @Override
             public int compare(Location l1, Location l2) {
-                return Float.compare(l1.getR(), l2.getR());
+                return Double.compare(l1.getR(), l2.getR());
             }
         };
         Arrays.sort(locations, comparator);
         return locations;
+    }
+
+    public static TransferPoint failPoint() {
+        return new TransferPoint(new Path(), new Path[]{new Path(new Route[][]{{new Route(new Location[]{new Location(-1, -1), new Location(-3,-1), new Location(-3, -3), new Location(-1, -3)})}})}, -1, -1);
     }
 }

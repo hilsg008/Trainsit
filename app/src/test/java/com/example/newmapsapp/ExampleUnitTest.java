@@ -18,11 +18,11 @@ public class ExampleUnitTest {
 
     @Test
     public void canCreateRoute() {
-        float[][] stops = new float[4][];
-        stops[0] = new float[]{0, 0};
-        stops[1] = new float[]{0, 1};
-        stops[2] = new float[]{1, 0};
-        stops[3] = new float[]{1, 1};
+        double[][] stops = new double[4][];
+        stops[0] = new double[]{0, 0};
+        stops[1] = new double[]{0, 1};
+        stops[2] = new double[]{1, 0};
+        stops[3] = new double[]{1, 1};
         System.out.println(new Route(stops));
     }
 
@@ -100,11 +100,6 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void transferPointsDoNotContainDuplicatePaths() {
-
-    }
-
-    @Test
     public void testTransferPoints() {
         ArrayList<Location> locs = new ArrayList<>();
         Location[] l2 = getLocations();
@@ -121,7 +116,7 @@ public class ExampleUnitTest {
             try {
                 Path[] correctPaths = p.getPaths(start,end);
                 for(Path path: correctPaths) {
-                    System.out.println(path);
+                    System.out.println("Path: " + path);
                 }
             } catch(PathNotFoundException e) {
                 System.out.println(e);
@@ -141,7 +136,7 @@ public class ExampleUnitTest {
         Comparator<Location> comparator = new Comparator<Location>() {
             @Override
             public int compare(Location l1, Location l2) {
-                return Float.compare(l1.getR(), l2.getR());
+                return Double.compare(l1.getR(), l2.getR());
             }
         };
         Arrays.sort(locations, comparator);
@@ -208,6 +203,10 @@ public class ExampleUnitTest {
         routes[6] = new Route(new Location[]{locs[0], locs[1], locs[2], locs[6], locs[13], locs[20]});
         routes[7] = new Route(new Location[]{locs[15], locs[16], locs[11], locs[5], locs[4], locs[1]});
         return routes;
+    }
+
+    static TransferPoint failPoint() {
+        return new TransferPoint(new Path(), new Path[]{new Path(new Route[][]{{new Route(new Location[]{new Location(-1, -1), new Location(-3,-1), new Location(-3, -3), new Location(-1, -3)})}})}, -1, -1);
     }
 
     @Test
