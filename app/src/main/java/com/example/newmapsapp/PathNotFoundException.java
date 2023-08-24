@@ -5,7 +5,7 @@ public class PathNotFoundException extends Exception {
         super("Path not found from " + start + " to " + goal);
     }
 
-    public PathNotFoundException(float x, float y) {
+    public PathNotFoundException(double x, double y) {
         super("Path Not Found At " + x + ", " + y + ".");
     }
 

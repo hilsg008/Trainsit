@@ -3,32 +3,36 @@ package com.example.newmapsapp;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Location {
-    private float x,y,r;
-    public Location(float PosX, float PosY) {
+    private double x,y,r;
+    public Location(double PosX, double PosY) {
         x = PosX;
         y = PosY;
-        r = (float)Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
+        r = Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
     }
 
     public Location(LatLng l) {
-        x = (float)l.latitude;
-        y = (float)l.longitude;
-        r = (float)Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
+        y = l.latitude;
+        x = l.longitude;
+        r = Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
     }
 
     public boolean equals(Location l) {
         return x == l.getX() && y == l.getY();
     }
 
-    public float getX() {
+    public boolean equals(LatLng l) {
+        return getCost(new Location(l)) < 20;
+    }
+
+    public double getX() {
         return x;
     }
 
-    public float getY() {
+    public double getY() {
         return y;
     }
 
-    public float getR() { return r; }
+    public double getR() { return r; }
 
     public String toString() {
         return "x: " + x + " y: " + y;
