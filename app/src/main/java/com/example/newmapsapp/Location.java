@@ -3,46 +3,51 @@ package com.example.newmapsapp;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Location {
-    private double x,y,r;
+    private LatLng latLng;
+    public double r;
     public Location(double PosX, double PosY) {
-        x = PosX;
-        y = PosY;
-        r = Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
+        latLng = new LatLng(PosY, PosX);
+        r = Math.sqrt(Math.pow(PosX,2)+Math.pow(PosY,2));
     }
 
     public Location(LatLng l) {
-        y = l.latitude;
-        x = l.longitude;
-        r = Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
+        latLng = l;
+        r = Math.sqrt(Math.pow(l.longitude,2)+Math.pow(l.latitude,2));
     }
 
     public boolean equals(Location l) {
-        return x == l.getX() && y == l.getY();
+        return latLng.longitude == l.getX() && latLng.latitude == l.getY();
     }
 
     public boolean equals(LatLng l) {
-        return getCost(new Location(l)) < 20;
+        return l.equals(latLng);
     }
 
     public double getX() {
-        return x;
+        return latLng.longitude;
     }
 
     public double getY() {
-        return y;
+        return latLng.latitude;
     }
 
-    public double getR() { return r; }
+    public double getR() {
+        return r;
+    }
+
+    public LatLng getLatLng() {
+        return latLng;
+    }
 
     public String toString() {
-        return "x: " + x + " y: " + y;
+        return "x: " + latLng.longitude + " y: " + latLng.latitude;
     }
 
     public int getCost(Location l) {
         return(int)(100*Math.sqrt(Math.pow(l.getX()-getX(),2) + Math.pow(l.getY()-getY(),2)));
     }
 
-    public LatLng toLatLng() {
-        return new LatLng(y,x);
+    public int getCost(LatLng l) {
+        return(int)(100*Math.sqrt(Math.pow(l.longitude-getX(),2) + Math.pow(l.latitude-getY(),2)));
     }
 }
