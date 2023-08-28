@@ -13,7 +13,7 @@ public class TransferPoint extends Location implements Comparable<TransferPoint>
     private Path pathToPoint;
     private boolean isInitialized;
     private Location goal;
-    public TransferPoint(Path pathToThisPoint, Path[] pathsFromPoint, float x, float y) {
+    public TransferPoint(Path pathToThisPoint, Path[] pathsFromPoint, double x, double y) {
         super(x,y);
         paths = pathsFromPoint;
         pathToPoint = pathToThisPoint;

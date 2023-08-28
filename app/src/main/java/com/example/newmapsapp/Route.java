@@ -9,7 +9,7 @@ public class Route {
         stops = stopLocations;
     }
 
-    public Route(float[][] stopLocations) {
+    public Route(double[][] stopLocations) {
         stops = new Location[stopLocations.length];
         for(int i=0; i<stops.length; i++) {
             stops[i] = new Location(stopLocations[i][0], stopLocations[i][1]);
@@ -49,6 +49,19 @@ public class Route {
         return new Location(-1,-1);
     }
 
+    public Location getEndOfRoute() {
+        return stops[stops.length-1];
+    }
+
+    public String toString() {
+        String s = "";
+        for(Location l: stops) {
+            s+=l.toString();
+            s+="\n";
+        }
+        return s;
+    }
+
     public boolean equals(Route r) {
         Location[] stops2 = r.getStops();
         if(stopsEqual(stops2)) {
@@ -75,18 +88,5 @@ public class Route {
             }
         }
         return true;
-    }
-
-    public Location getEndOfRoute() {
-        return stops[stops.length-1];
-    }
-
-    public String toString() {
-        String s = "";
-        for(Location l: stops) {
-            s+=l.toString();
-            s+="\n";
-        }
-        return s;
     }
 }
