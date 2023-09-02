@@ -1,24 +1,29 @@
 package com.example.newmapsapp;
 
+import static com.example.newmapsapp.ExampleClasses.getCorrectSortedLocations;
+
 import android.os.Bundle;
 
 import androidx.fragment.app.FragmentActivity;
 
-import com.example.newmapsapp.databinding.ActivityMapsBinding;
+import com.example.newmapsapp.databinding.BottomListBinding;
+import com.example.newmapsapp.databinding.MainLayoutBinding;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private ActivityMapsBinding binding;
+    private MainLayoutBinding binding;
+    private BottomListBinding bottomListBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityMapsBinding.inflate(getLayoutInflater());
+        binding = MainLayoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -39,5 +44,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        drawPoints();
+    }
+
+    public void drawPoints() {
+        Location[] locs = getCorrectSortedLocations();
+        for(Location l: locs) {
+            MarkerOptions m = new MarkerOptions();
+            m.alpha((float)Math.random()*360);
+            m.position(l.getLatLng());
+            mMap.addMarker(m);
+        }
     }
 }

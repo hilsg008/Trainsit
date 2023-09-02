@@ -5,6 +5,9 @@ import java.util.Comparator;
 
 public class ExampleClasses {
 
+    public static final String startLocID = "startLoc";
+    public static final String endLocID = "endLoc";
+
     public static Location[] getLocations() {
         Location[] locs = new Location[21];
         locs[0] = new Location(2.1f,17.8f);
