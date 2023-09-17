@@ -9,11 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="2"
-        android:hint="Start Location" />
+        android:hint="Start Location"
+        android:minHeight="48dp" />
+
     <EditText
         android:id="@+id/endLoc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="2"
-        android:hint="End Location" />
+        android:hint="End Location"
+        android:minHeight="48dp" />
 </LinearLayout>
