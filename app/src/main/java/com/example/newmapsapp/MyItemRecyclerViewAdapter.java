@@ -7,7 +7,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.newmapsapp.databinding.FragmentItemBinding;
-import com.example.newmapsapp.placeholder.BottomListAble.BottomListAbleItem;
+import com.example.newmapsapp.placeholder.BottomListAbleItem;
 
 import java.util.List;
 

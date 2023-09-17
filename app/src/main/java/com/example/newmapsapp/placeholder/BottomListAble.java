@@ -1,9 +1,7 @@
 package com.example.newmapsapp.placeholder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Helper class for providing sample content for user interfaces created by
@@ -18,11 +16,6 @@ public class BottomListAble {
      */
     public static final List<BottomListAbleItem> ITEMS = new ArrayList<BottomListAbleItem>();
 
-    /**
-     * A map of sample (placeholder) items, by ID.
-     */
-    public static final Map<String, BottomListAbleItem> ITEM_MAP = new HashMap<String, BottomListAbleItem>();
-
     private static final int COUNT = 25;
 
     static {
@@ -34,7 +27,6 @@ public class BottomListAble {
 
     private static void addItem(BottomListAbleItem item) {
         ITEMS.add(item);
-        ITEM_MAP.put(item.id, item);
     }
 
     private static BottomListAbleItem createPlaceholderItem(int position) {
@@ -53,20 +45,5 @@ public class BottomListAble {
     /**
      * A placeholder item representing a piece of content.
      */
-    public static class BottomListAbleItem {
-        public final String id;
-        public final String content;
-        public final String details;
 
-        public BottomListAbleItem(String id, String content, String details) {
-            this.id = id;
-            this.content = content;
-            this.details = details;
-        }
-
-        @Override
-        public String toString() {
-            return content;
-        }
-    }
 }
