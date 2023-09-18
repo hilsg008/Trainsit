@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.newmapsapp.placeholder.BottomListAble;
 
+import java.util.ArrayList;
+
 /**
  * A fragment representing a list of Items.
  */
@@ -63,7 +65,9 @@ public class ItemFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(BottomListAble.ITEMS));
+            ArrayList<BottomListAble> arr = new ArrayList<>();
+            arr.add(new BottomListAble());
+            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(arr));
         }
         return view;
     }
