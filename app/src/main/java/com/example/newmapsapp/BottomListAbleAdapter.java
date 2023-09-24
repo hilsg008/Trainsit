@@ -34,11 +34,16 @@ public class BottomListAbleAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        View convertView = layoutInflater.inflate(R.layout.bottom_listable_layout, null);
-        TextView test = (TextView) convertView.findViewById(R.id.method);
-        TextView test2 = (TextView) convertView.findViewById(R.id.time);
-        test.setText(items[i].getMethod());
-        test2.setText(items[i].getTime());
-        return convertView;
+        View defaultView = items[i].getView();
+        if(defaultView == null) {
+            View convertView = layoutInflater.inflate(R.layout.bottom_listable_layout, null);
+            TextView test = (TextView) convertView.findViewById(R.id.method);
+            TextView test2 = (TextView) convertView.findViewById(R.id.time);
+            test.setText(items[i].getMethod());
+            test2.setText(items[i].getTime());
+            return convertView;
+        } else {
+            return defaultView;
+        }
     }
 }
