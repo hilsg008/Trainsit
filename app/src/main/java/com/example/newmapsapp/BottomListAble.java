@@ -1,5 +1,7 @@
 package com.example.newmapsapp;
 
+import android.view.View;
+
 public class BottomListAble {
     private final String method;
     private final String time;
@@ -19,6 +21,10 @@ public class BottomListAble {
 
     public String getTime() {
         return time;
+    }
+
+    public View getView() {
+        return null;
     }
 
     @Override
