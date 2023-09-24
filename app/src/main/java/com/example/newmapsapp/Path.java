@@ -2,7 +2,7 @@ package com.example.newmapsapp;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -35,6 +35,17 @@ public class Path extends BottomListAble {
                 costToEnd += r[0].getCost();
             }
         }
+    }
+
+    private Location[] getLocs() {
+        ArrayList<Location> result = new ArrayList<>();
+        for(Route[] r: routes) {
+            Location[] stops = r[0].getStops();
+            for(Location l:stops) {
+                result.add(l);
+            }
+        }
+        return result.toArray(new Location[result.size()]);
     }
 
     public LatLng[] getPoints() {
@@ -96,14 +107,9 @@ public class Path extends BottomListAble {
 
     @Override
     public View getView(LayoutInflater layoutInflater) {
-        LatLng[] l = getPoints();
-        View convertView = layoutInflater.inflate(R.layout.path_item_layout, null);
-        TextView test = (TextView) convertView.findViewById(R.id.location1);
-        test.setText(l[0].toString());
-        test = (TextView) convertView.findViewById(R.id.location2);
-        test.setText(l[1].toString());
-        test = (TextView) convertView.findViewById(R.id.location3);
-        test.setText(l[2].toString());
-        return convertView;
+        View v = layoutInflater.inflate(R.layout.path_item_layout, null);
+        ListView listView = v.findViewById(R.id.locationList);
+        listView.setAdapter(new LocationAdapter(layoutInflater.getContext(), getLocs()));
+        return v;
     }
 }

@@ -23,8 +23,8 @@ public class BottomListAbleAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int i) {
-        return null;
+    public BottomListAble getItem(int i) {
+        return items[i];
     }
 
     @Override

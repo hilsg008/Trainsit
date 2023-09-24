@@ -2,32 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:minHeight="40dp">
 
-    <TextView
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:minHeight="40dp"
-        android:id="@+id/location1"
-        android:layout_weight="1"
-        android:background="@color/material_dynamic_neutral60"
-        android:textColor="@color/white"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:minHeight="40dp"
-        android:id="@+id/location2"
-        android:layout_weight="1"
-        android:background="@color/material_dynamic_neutral50"
-        android:textColor="@color/white"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:minHeight="40dp"
-        android:id="@+id/location3"
-        android:layout_weight="1"
-        android:background="@color/material_dynamic_neutral60"
-        android:textColor="@color/white"/>
-
+        android:id="@+id/locationList" />
 </LinearLayout>
