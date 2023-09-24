@@ -1,5 +1,9 @@
 package com.example.newmapsapp;
 
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -11,7 +15,7 @@ import java.util.Arrays;
  * Each Path is created for a different start point in search algorithm
  * A->B will have the same Route N as A->C and both B->D and B->C will use their (different from A) same copy
  */
-public class Path {
+public class Path extends BottomListAble {
 
     private Route[][] routes;
     public boolean isInitialized;
@@ -88,5 +92,18 @@ public class Path {
             s+= r[0];
         }
         return s;
+    }
+
+    @Override
+    public View getView(LayoutInflater layoutInflater) {
+        LatLng[] l = getPoints();
+        View convertView = layoutInflater.inflate(R.layout.path_item_layout, null);
+        TextView test = (TextView) convertView.findViewById(R.id.location1);
+        test.setText(l[0].toString());
+        test = (TextView) convertView.findViewById(R.id.location2);
+        test.setText(l[1].toString());
+        test = (TextView) convertView.findViewById(R.id.location3);
+        test.setText(l[2].toString());
+        return convertView;
     }
 }

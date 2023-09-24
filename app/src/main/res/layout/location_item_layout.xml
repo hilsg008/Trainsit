@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:minHeight="40dp"
-        android:id="@+id/method"
+        android:id="@+id/location"
         android:layout_weight="1"
         android:background="@color/material_dynamic_neutral60"
         android:textColor="@color/white"/>
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:minHeight="40dp"
-        android:id="@+id/time"
+        android:id="@+id/costToLocation"
         android:layout_weight="3"
         android:background="@color/material_dynamic_neutral50"
         android:textColor="@color/white"/>
