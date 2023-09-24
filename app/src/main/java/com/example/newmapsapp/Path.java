@@ -38,7 +38,7 @@ public class Path {
         for(Route[] r: routes) {
             Location[] stops = r[0].getStops();
             for(Location l:stops) {
-                result.add(l.toLatLng());
+                result.add(l.getLatLng());
             }
             System.out.println(result);
         }
