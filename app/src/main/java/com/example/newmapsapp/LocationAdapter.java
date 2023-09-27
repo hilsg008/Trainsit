@@ -1,42 +1,40 @@
 package com.example.newmapsapp;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class LocationAdapter extends BaseAdapter {
-    Context context;
-    Location[] items;
-    LayoutInflater layoutInflater;
+import androidx.recyclerview.widget.RecyclerView;
 
-    public LocationAdapter(Context ctx, Location[] b) {
-        context = ctx;
-        items = b;
-        layoutInflater = LayoutInflater.from(ctx);
+public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
+    private Location[] items;
+
+    public LocationAdapter(Location[] items) {
+        this.items = items;
     }
+
     @Override
-    public int getCount() {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.path_location_item_layout,parent,false));
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.text.setText(items[position].getCost(Location.ZERO));
+    }
+
+    @Override
+    public int getItemCount() {
         return items.length;
     }
 
-    @Override
-    public Location getItem(int i) {
-        return items[i];
-    }
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView text;
 
-    @Override
-    public long getItemId(int i) {
-        return 0;
-    }
-
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        View convertView = layoutInflater.inflate(R.layout.path_location_item_layout, null);
-        TextView test = (TextView) convertView.findViewById(R.id.locationItem);
-        test.setText("bruh");
-        return convertView;
+        public ViewHolder(View itemView) {
+            super(itemView);
+            text = (TextView) itemView.findViewById(R.id.locationInPathList);
+        }
     }
 }

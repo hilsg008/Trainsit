@@ -7,6 +7,8 @@ import android.widget.TextView;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Location extends BottomListAble {
+    public static Location ZERO = new Location(0,0);
+
     private LatLng latLng;
     public double r;
     public Location(double PosX, double PosY) {

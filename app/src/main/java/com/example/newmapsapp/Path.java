@@ -2,7 +2,9 @@ package com.example.newmapsapp;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ListView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -108,8 +110,9 @@ public class Path extends BottomListAble {
     @Override
     public View getView(LayoutInflater layoutInflater) {
         View v = layoutInflater.inflate(R.layout.path_item_layout, null);
-        ListView listView = v.findViewById(R.id.locationList);
-        listView.setAdapter(new LocationAdapter(layoutInflater.getContext(), getLocs()));
+        RecyclerView recyclerView = v.findViewById(R.id.locationList);
+        recyclerView.setAdapter(new LocationAdapter(getLocs()));
+        LinearLayoutManager l = new LinearLayoutManager(layoutInflater.getContext(),LinearLayoutManager.HORIZONTAL, false);
         return v;
     }
 }
