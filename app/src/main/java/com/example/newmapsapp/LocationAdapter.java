@@ -16,12 +16,14 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.path_location_item_layout,parent,false));
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.path_location_item_layout,parent,false);
+        v.setMinimumWidth(parent.getMeasuredWidth()/items.length);
+        return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.text.setText(items[position].getCost(Location.ZERO));
+        holder.text.setText(Integer.toString(items[position].getCost(Location.ZERO)));
     }
 
     @Override
