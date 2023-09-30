@@ -113,6 +113,7 @@ public class Path extends BottomListAble {
         RecyclerView recyclerView = v.findViewById(R.id.locationList);
         recyclerView.setAdapter(new LocationAdapter(getLocs()));
         LinearLayoutManager l = new LinearLayoutManager(layoutInflater.getContext(),LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(l);
         return v;
     }
 }
