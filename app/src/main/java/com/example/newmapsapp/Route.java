@@ -1,8 +1,10 @@
 package com.example.newmapsapp;
 
-import java.util.Arrays;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
-public class Route {
+public class Route extends BottomListAble {
     private Location[] stops;
 
     public Route(Location[] stopLocations) {
@@ -16,14 +18,34 @@ public class Route {
         }
     }
 
-    /**
-     * Returns subroute
-     * @param start index in stops (inclusive)
-     * @param end index in stops (exclusive)
-     * @return subRoute of this route
-     */
-    public Route getSubRoute(int start, int end) {
-        return new Route(Arrays.copyOfRange(stops, start, end));
+    @Override
+    public View getView(LayoutInflater layoutInflater) {
+        Location closestStop = getClosestStop(Location.ZERO);
+        View v = closestStop.getView(layoutInflater);
+        TextView textView = (TextView) v.findViewById(R.id.location);
+        textView.setText("cost to 0,0 from " + closestStop.toString());
+        TextView otherView = (TextView) v.findViewById(R.id.costToLocation);
+        otherView.setText(Integer.toString(closestStop.getCost(Location.ZERO)));
+        return v;
+    }
+
+    public Location getClosestStop(Location l) {
+        int cost = getClosestCost(l);
+        for(Location loc: stops) {
+            if(loc.getCost(l) == cost) {
+                return loc;
+            }
+        }
+        return new Location(0,0);
+    }
+
+    private int getClosestCost(Location l) {
+        int result = Integer.MAX_VALUE;
+        for(Location loc: stops) {
+            int cost = loc.getCost(l);
+            result = Math.min(cost,result);
+        }
+        return result;
     }
 
     public Location[] getStops() {
