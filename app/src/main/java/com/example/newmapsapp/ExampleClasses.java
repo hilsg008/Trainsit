@@ -7,6 +7,12 @@ public class ExampleClasses {
 
     public static final String startLocID = "startLoc";
     public static final String endLocID = "endLoc";
+    public static final int light_gray = -6908266;
+    public static final int dark_gray = -13487566;
+
+    public static int convertToColorInt(int a, int r, int g, int b) {
+        return (a & 0xff) << 24 | (r & 0xff) << 16 | (g & 0xff) << 8 | (b & 0xff);
+    }
 
     public static Location[] getLocations() {
         Location[] locs = new Location[21];
