@@ -24,6 +24,11 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.text.setText(Integer.toString(items[position].getCost(Location.ZERO)));
+        holder.setColor(getColor(position));
+    }
+
+    private int getColor(int position) {
+        return position%2==0 ? ExampleClasses.dark_gray : ExampleClasses.light_gray;
     }
 
     @Override
@@ -33,10 +38,16 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView text;
+        private View item;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            item = itemView;
             text = (TextView) itemView.findViewById(R.id.locationInPathList);
+        }
+
+        public void setColor(int color) {
+            item.setBackgroundColor(color);
         }
     }
 }
