@@ -1,8 +1,14 @@
 package com.example.newmapsapp;
 
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
+
 import com.google.android.gms.maps.model.LatLng;
 
-public class Location {
+public class Location extends BottomListAble {
+    public static Location ZERO = new Location(0,0);
+
     private LatLng latLng;
     public double r;
     public Location(double PosX, double PosY) {
@@ -49,5 +55,15 @@ public class Location {
 
     public int getCost(LatLng l) {
         return(int)(100*Math.sqrt(Math.pow(l.longitude-getX(),2) + Math.pow(l.latitude-getY(),2)));
+    }
+
+    @Override
+    public View getView(LayoutInflater layoutInflater) {
+        View convertView = layoutInflater.inflate(R.layout.location_item_layout, null);
+        TextView test = (TextView) convertView.findViewById(R.id.location);
+        TextView test2 = (TextView) convertView.findViewById(R.id.costToLocation);
+        test.setText(toString());
+        test2.setText("lol");
+        return convertView;
     }
 }

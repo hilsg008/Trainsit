@@ -3,7 +3,6 @@ package com.example.newmapsapp;
 import static com.example.newmapsapp.ExampleClasses.getCorrectSortedLocations;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -21,7 +20,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("ThisIsATag", "lolololol");
 
         binding = MainLayoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

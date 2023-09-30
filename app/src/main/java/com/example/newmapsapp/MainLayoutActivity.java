@@ -12,7 +12,7 @@ public class MainLayoutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
         ListView listView = findViewById(R.id.bottomList);
-        BottomListAble[] b = new BottomListAble[]{new BottomListAble(), new BottomListAble()};
+        BottomListAble[] b = new BottomListAble[]{new BottomListAble(), new Location(0,0), ExampleClasses.getRoutes()[0] ,new Path(new Route[][]{{new Route(ExampleClasses.getLocations())}})};
         listView.setAdapter(new BottomListAbleAdapter(getApplicationContext(), b));
     }
 }

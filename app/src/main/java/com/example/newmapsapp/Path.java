@@ -1,5 +1,11 @@
 package com.example.newmapsapp;
 
+import android.view.LayoutInflater;
+import android.view.View;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -11,7 +17,7 @@ import java.util.Arrays;
  * Each Path is created for a different start point in search algorithm
  * A->B will have the same Route N as A->C and both B->D and B->C will use their (different from A) same copy
  */
-public class Path {
+public class Path extends BottomListAble {
 
     private Route[][] routes;
     public boolean isInitialized;
@@ -31,6 +37,17 @@ public class Path {
                 costToEnd += r[0].getCost();
             }
         }
+    }
+
+    private Location[] getLocs() {
+        ArrayList<Location> result = new ArrayList<>();
+        for(Route[] r: routes) {
+            Location[] stops = r[0].getStops();
+            for(Location l:stops) {
+                result.add(l);
+            }
+        }
+        return result.toArray(new Location[result.size()]);
     }
 
     public LatLng[] getPoints() {
@@ -88,5 +105,15 @@ public class Path {
             s+= r[0];
         }
         return s;
+    }
+
+    @Override
+    public View getView(LayoutInflater layoutInflater) {
+        View v = layoutInflater.inflate(R.layout.path_item_layout, null);
+        RecyclerView recyclerView = v.findViewById(R.id.locationList);
+        recyclerView.setAdapter(new LocationAdapter(getLocs()));
+        LinearLayoutManager l = new LinearLayoutManager(layoutInflater.getContext(),LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(l);
+        return v;
     }
 }
