@@ -64,6 +64,15 @@ public class Location extends BottomListAble {
         TextView test2 = (TextView) convertView.findViewById(R.id.costToLocation);
         test.setText(toString());
         test2.setText("lol");
+        convertView.setOnClickListener(this);
         return convertView;
+    }
+
+    @Override
+    public void onClick(View view) {
+        TextView textView = view.findViewById(R.id.location);
+        textView.setText("clicked");
+        TextView textView2 = view.findViewById(R.id.costToLocation);
+        textView2.setText("clicked");
     }
 }
