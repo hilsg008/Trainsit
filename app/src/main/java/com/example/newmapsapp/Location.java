@@ -70,9 +70,8 @@ public class Location extends BottomListAble {
 
     @Override
     public void onClick(View view) {
-        TextView textView = view.findViewById(R.id.location);
-        textView.setText("clicked");
-        TextView textView2 = view.findViewById(R.id.costToLocation);
-        textView2.setText("clicked");
+        //View mainLayout = view.findViewById(R.id.home_layout);
+        //NavController navController = Navigation.findNavController(mainLayout);
+        //navController.navigate(R.id.action_to_destinationLayoutActivity);
     }
 }
