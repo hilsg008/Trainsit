@@ -4,6 +4,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 import com.google.android.gms.maps.model.LatLng;
 
 public class Location extends BottomListAble {
@@ -70,8 +73,7 @@ public class Location extends BottomListAble {
 
     @Override
     public void onClick(View view) {
-        //View mainLayout = view.findViewById(R.id.home_layout);
-        //NavController navController = Navigation.findNavController(mainLayout);
-        //navController.navigate(R.id.action_to_destinationLayoutActivity);
+        NavController navController = Navigation.findNavController(view);
+        navController.navigate(R.id.go_to_destinationLayoutFragmentNav);
     }
 }
