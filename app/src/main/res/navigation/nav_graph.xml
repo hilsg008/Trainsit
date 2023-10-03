@@ -3,24 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/destinationLayoutActivityNav">
+    app:startDestination="@id/homeLayoutFragmentNav">
 
-    <activity
-        android:id="@+id/homeLayoutActivityNav"
-        android:name="com.example.newmapsapp.HomeLayoutActivity"
+    <fragment
+        android:id="@+id/homeLayoutFragmentNav"
+        android:name="com.example.newmapsapp.HomeLayoutFragment"
         android:label="home_layout"
         tools:layout="@layout/home_layout">
-    </activity>
+        <action
+            android:id="@+id/go_to_destinationLayoutFragmentNav"
+            app:destination="@id/destinationLayoutFragmentNav" />
+    </fragment>
     <fragment
-        android:id="@+id/destinationLayoutActivityNav"
+        android:id="@+id/destinationLayoutFragmentNav"
         android:name="com.example.newmapsapp.DestinationLayoutFragment"
         android:label="destination_layout"
         tools:layout="@layout/destination_layout">
         <action
-            android:id="@+id/go_to_destinationActivityNav"
-            app:destination="@id/homeLayoutActivityNav" />
+            android:id="@+id/go_to_homeFragmentNav"
+            app:destination="@id/homeLayoutFragmentNav" />
     </fragment>
-    <action
-        android:id="@+id/go_to_homeLayoutActivityNav"
-        app:destination="@id/destinationLayoutActivityNav" />
 </navigation>
