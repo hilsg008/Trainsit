@@ -1,4 +1,10 @@
-package com.example.newmapsapp;
+package com.example.newmapsapp.builder;
+
+import com.example.newmapsapp.PathNotFoundException;
+import com.example.newmapsapp.bottomlistable.Location;
+import com.example.newmapsapp.bottomlistable.Path;
+import com.example.newmapsapp.bottomlistable.Route;
+import com.example.newmapsapp.bottomlistable.TransferPoint;
 
 import java.util.ArrayList;
 import java.util.Arrays;

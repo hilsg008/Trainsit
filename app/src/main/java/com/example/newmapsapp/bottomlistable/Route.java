@@ -1,8 +1,10 @@
-package com.example.newmapsapp;
+package com.example.newmapsapp.bottomlistable;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+
+import com.example.newmapsapp.R;
 
 public class Route extends BottomListAble {
     private Location[] stops;

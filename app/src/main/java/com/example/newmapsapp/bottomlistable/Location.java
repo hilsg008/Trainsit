@@ -1,4 +1,4 @@
-package com.example.newmapsapp;
+package com.example.newmapsapp.bottomlistable;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +7,7 @@ import android.widget.TextView;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.newmapsapp.R;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Location extends BottomListAble {

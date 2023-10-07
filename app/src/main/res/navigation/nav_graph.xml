@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeLayoutFragmentNav"
-        android:name="com.example.newmapsapp.HomeLayoutFragment"
+        android:name="com.example.newmapsapp.fragment.HomeLayoutFragment"
         android:label="home_layout"
         tools:layout="@layout/home_layout">
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/destinationLayoutFragmentNav"
-        android:name="com.example.newmapsapp.DestinationLayoutFragment"
+        android:name="com.example.newmapsapp.fragment.DestinationLayoutFragment"
         android:label="destination_layout"
         tools:layout="@layout/destination_layout">
         <action

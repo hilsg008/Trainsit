@@ -1,4 +1,4 @@
-package com.example.newmapsapp;
+package com.example.newmapsapp.bottomlistable;
 
 import android.view.LayoutInflater;
 import android.view.View;

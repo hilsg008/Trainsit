@@ -1,4 +1,4 @@
-package com.example.newmapsapp;
+package com.example.newmapsapp.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,6 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.example.newmapsapp.bottomlistable.BottomListAble;
+import com.example.newmapsapp.R;
 
 public class BottomListAbleAdapter extends BaseAdapter {
     Context context;

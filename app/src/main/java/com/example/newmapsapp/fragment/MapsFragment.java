@@ -1,4 +1,4 @@
-package com.example.newmapsapp;
+package com.example.newmapsapp.fragment;
 
 import static com.example.newmapsapp.ExampleClasses.getCorrectSortedLocations;
 
@@ -7,6 +7,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.newmapsapp.bottomlistable.Location;
+import com.example.newmapsapp.R;
 import com.example.newmapsapp.databinding.HomeLayoutBinding;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -14,7 +16,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsFragment extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private HomeLayoutBinding binding;
