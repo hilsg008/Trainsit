@@ -1,5 +1,11 @@
 package com.example.newmapsapp;
 
+import com.example.newmapsapp.bottomlistable.Location;
+import com.example.newmapsapp.bottomlistable.Path;
+import com.example.newmapsapp.bottomlistable.Route;
+import com.example.newmapsapp.bottomlistable.TransferPoint;
+import com.example.newmapsapp.builder.PathBuilder;
+import com.example.newmapsapp.builder.TransferPointBuilder;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Assert;

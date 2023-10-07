@@ -1,4 +1,4 @@
-package com.example.newmapsapp;
+package com.example.newmapsapp.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.newmapsapp.bottomlistable.BottomListAble;
+import com.example.newmapsapp.ExampleClasses;
+import com.example.newmapsapp.bottomlistable.*;
+import com.example.newmapsapp.adapter.BottomListAbleAdapter;
 import com.example.newmapsapp.databinding.HomeLayoutBinding;
 
 public class HomeLayoutFragment extends Fragment {

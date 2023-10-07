@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MapsActivity"
+            android:name=".fragment.MapsFragment"
             android:exported="true"
             android:label="@string/title_activity_maps">
         </activity>

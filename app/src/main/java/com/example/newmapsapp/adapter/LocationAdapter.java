@@ -1,4 +1,4 @@
-package com.example.newmapsapp;
+package com.example.newmapsapp.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -6,6 +6,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.newmapsapp.ExampleClasses;
+import com.example.newmapsapp.bottomlistable.Location;
+import com.example.newmapsapp.R;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
     private Location[] items;

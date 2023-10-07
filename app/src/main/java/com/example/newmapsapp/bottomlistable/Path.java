@@ -1,4 +1,4 @@
-package com.example.newmapsapp;
+package com.example.newmapsapp.bottomlistable;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -6,6 +6,8 @@ import android.view.View;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.newmapsapp.R;
+import com.example.newmapsapp.adapter.LocationAdapter;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;

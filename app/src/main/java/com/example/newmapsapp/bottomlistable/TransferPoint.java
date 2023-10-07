@@ -1,4 +1,6 @@
-package com.example.newmapsapp;
+package com.example.newmapsapp.bottomlistable;
+
+import com.example.newmapsapp.PathNotFoundException;
 
 import java.util.ArrayList;
 import java.util.Arrays;

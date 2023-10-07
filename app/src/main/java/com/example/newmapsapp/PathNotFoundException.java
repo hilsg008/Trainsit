@@ -1,5 +1,7 @@
 package com.example.newmapsapp;
 
+import com.example.newmapsapp.bottomlistable.Location;
+
 public class PathNotFoundException extends Exception {
     public PathNotFoundException(Location start, Location goal) {
         super("Path not found from " + start + " to " + goal);
