@@ -1,13 +1,19 @@
 package com.example.newmapsapp.bottomlistable;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.newmapsapp.R;
+import com.example.newmapsapp.viewmodel.LocationViewModel;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Location extends BottomListAble {
@@ -75,6 +81,18 @@ public class Location extends BottomListAble {
     @Override
     public void onClick(View view) {
         NavController navController = Navigation.findNavController(view);
+        LocationViewModel locationViewModel = new ViewModelProvider(getActivity(view.getContext())).get(LocationViewModel.class);
+        locationViewModel.setLocation(this);
         navController.navigate(R.id.go_to_destinationLayoutFragmentNav);
+    }
+
+    private FragmentActivity getActivity(Context context) {
+        while (context instanceof ContextWrapper) {
+            if (context instanceof FragmentActivity) {
+                return (FragmentActivity) context;
+            }
+            context = ((ContextWrapper)context).getBaseContext();
+        }
+        return null;
     }
 }

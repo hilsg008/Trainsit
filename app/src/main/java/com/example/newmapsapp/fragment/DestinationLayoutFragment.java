@@ -13,18 +13,22 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.newmapsapp.bottomlistable.*;
 import com.example.newmapsapp.adapter.BottomListAbleAdapter;
+import com.example.newmapsapp.builder.PathBuilder;
 import com.example.newmapsapp.databinding.DestinationLayoutBinding;
-import com.example.newmapsapp.viewmodel.TransferPointViewModel;
+import com.example.newmapsapp.viewmodel.LocationViewModel;
+import com.example.newmapsapp.viewmodel.PathBuilderViewModel;
 
 public class DestinationLayoutFragment extends Fragment {
 
     private BottomListAbleAdapter adapter;
     private DestinationLayoutBinding binding;
-    private TransferPointViewModel pointViewModel;
+    private PathBuilderViewModel builderViewModel;
+    private Location location;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DestinationLayoutBinding.inflate(inflater, container, false);
-        pointViewModel = new ViewModelProvider(requireActivity()).get(TransferPointViewModel.class);
+        builderViewModel = new ViewModelProvider(requireActivity()).get(PathBuilderViewModel.class);
+        location = new ViewModelProvider(requireActivity()).get(LocationViewModel.class).getLocation();
         ListView listView = binding.bottomList;
         BottomListAble[] b = new BottomListAble[]{};
         adapter = new BottomListAbleAdapter(inflater.getContext(), b);
@@ -34,7 +38,7 @@ public class DestinationLayoutFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        TransferPoint[] points = pointViewModel.getPoints().getValue();
-        adapter.setItems(points);
+        PathBuilder pb = builderViewModel.getBuilder();
+        adapter.setItems(new BottomListAble[]{location});
     }
 }

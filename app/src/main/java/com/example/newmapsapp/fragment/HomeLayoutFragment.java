@@ -23,7 +23,7 @@ public class HomeLayoutFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = HomeLayoutBinding.inflate(inflater, container, false);
         ListView listView = binding.bottomList;
-        BottomListAble[] b = new BottomListAble[]{new BottomListAble(), new Location(0,0), ExampleClasses.getRoutes()[0] ,new Path(new Route[][]{{new Route(ExampleClasses.getLocations())}})};
+        BottomListAble[] b = new BottomListAble[]{new BottomListAble(), new Location(1,1), ExampleClasses.getRoutes()[0] ,new Path(new Route[][]{{new Route(ExampleClasses.getLocations())}})};
         listView.setAdapter(new BottomListAbleAdapter(inflater.getContext(), b));
         return binding.getRoot();
     }
