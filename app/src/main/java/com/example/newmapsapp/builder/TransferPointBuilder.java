@@ -11,7 +11,7 @@ import java.util.Arrays;
 public class TransferPointBuilder {
     static int MAXIMUM_COST = 0;
 
-    static TransferPoint[] getTransferPoints(Route[] routes) {
+    public static TransferPoint[] getTransferPoints(Route[] routes) {
         if(routes.length == 0) {
             return null;
         }
@@ -60,7 +60,7 @@ public class TransferPointBuilder {
         return removeDuplicatePoints(result);
     }
 
-    static TransferPoint[] getPointsBetweenRoutes(Route r1, Route r2) {
+    private static TransferPoint[] getPointsBetweenRoutes(Route r1, Route r2) {
         Location[] stops = r1.getStops();
         Location[] stops2 = r2.getStops();
         ArrayList<Integer> pointsInR1 = new ArrayList<>();
@@ -118,7 +118,7 @@ public class TransferPointBuilder {
      * @param indexToStartAt the index in t to start at
      * @return TransferPoint[] containing any points in indexes
      */
-    static TransferPoint[] addPoints(TransferPoint[] t, Location[] stops, int[] indexes, int indexToStartAt) {
+    private static TransferPoint[] addPoints(TransferPoint[] t, Location[] stops, int[] indexes, int indexToStartAt) {
         if(indexes.length == 1) {
             t[indexToStartAt] = new TransferPoint(new Path(), new Path[]{
                     new Path(new Route[][]{{new Route(invertStops(Arrays.copyOfRange(stops, 0, indexes[0]+1)))}}),
@@ -148,7 +148,7 @@ public class TransferPointBuilder {
         return t;
     }
 
-    static int[] simplifyIndexes(int[] indexes) {
+    private static int[] simplifyIndexes(int[] indexes) {
         ArrayList<Integer> result = new ArrayList<>();
         int startIndex = indexes[0];
         result.add(startIndex);
@@ -166,7 +166,7 @@ public class TransferPointBuilder {
         return intArrayListToPrimitive(result);
     }
 
-    static boolean locationInArray(Location l, TransferPoint[] points) {
+    public static boolean locationInArray(Location l, TransferPoint[] points) {
         for(TransferPoint t:points) {
             if(l.equals(t)) {
                 return true;
@@ -175,7 +175,7 @@ public class TransferPointBuilder {
         return false;
     }
 
-    static Location[] invertStops(Location[] locations) {
+    public static Location[] invertStops(Location[] locations) {
         Location[] result = new Location[locations.length];
         for(int i=0; i<locations.length; i++) {
             result[i] = locations[locations.length-1-i];
@@ -183,7 +183,7 @@ public class TransferPointBuilder {
         return result;
     }
 
-    static int[] intArrayListToPrimitive(ArrayList<Integer> ints) {
+    public static int[] intArrayListToPrimitive(ArrayList<Integer> ints) {
         int[] result = new int[ints.size()];
         for(int i=0; i<result.length; i++) {
             result[i] = ints.get(i);
@@ -191,7 +191,7 @@ public class TransferPointBuilder {
         return result;
     }
 
-    static TransferPoint[] removeDuplicatePoints(ArrayList<TransferPoint> locs) {
+    public static TransferPoint[] removeDuplicatePoints(ArrayList<TransferPoint> locs) {
         ArrayList<TransferPoint> result = new ArrayList<>();
         for(TransferPoint t: locs) {
             int index = getIndexInPoints(result, t);
@@ -204,7 +204,7 @@ public class TransferPointBuilder {
         return result.toArray(new TransferPoint[result.size()]);
     }
 
-    static int getIndexInPoints(ArrayList<TransferPoint> points, TransferPoint loc) {
+    public static int getIndexInPoints(ArrayList<TransferPoint> points, TransferPoint loc) {
         TransferPoint[] result = points.toArray(new TransferPoint[points.size()]);
         for(int i=0; i<result.length; i++) {
             if(result[i].equals(loc)) {
