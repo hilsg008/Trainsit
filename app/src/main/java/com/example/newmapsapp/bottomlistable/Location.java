@@ -13,6 +13,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.newmapsapp.R;
+import com.example.newmapsapp.viewmodel.EndLocationViewModel;
 import com.example.newmapsapp.viewmodel.LocationViewModel;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -81,7 +82,7 @@ public class Location extends BottomListAble {
     @Override
     public void onClick(View view) {
         NavController navController = Navigation.findNavController(view);
-        LocationViewModel locationViewModel = new ViewModelProvider(getActivity(view.getContext())).get(LocationViewModel.class);
+        EndLocationViewModel locationViewModel = new ViewModelProvider(getActivity(view.getContext())).get(EndLocationViewModel.class);
         locationViewModel.setLocation(this);
         navController.navigate(R.id.go_to_destinationLayoutFragmentNav);
     }

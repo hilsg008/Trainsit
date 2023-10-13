@@ -1,6 +1,7 @@
 package com.example.newmapsapp.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,24 +12,29 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.newmapsapp.PathNotFoundException;
 import com.example.newmapsapp.bottomlistable.*;
 import com.example.newmapsapp.adapter.BottomListAbleAdapter;
 import com.example.newmapsapp.builder.PathBuilder;
 import com.example.newmapsapp.databinding.DestinationLayoutBinding;
+import com.example.newmapsapp.viewmodel.EndLocationViewModel;
 import com.example.newmapsapp.viewmodel.LocationViewModel;
 import com.example.newmapsapp.viewmodel.PathBuilderViewModel;
+import com.example.newmapsapp.viewmodel.StartLocationViewModel;
 
 public class DestinationLayoutFragment extends Fragment {
 
     private BottomListAbleAdapter adapter;
     private DestinationLayoutBinding binding;
-    private PathBuilderViewModel builderViewModel;
-    private Location location;
+    private PathBuilder builder;
+    private Location start;
+    private Location end;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DestinationLayoutBinding.inflate(inflater, container, false);
-        builderViewModel = new ViewModelProvider(requireActivity()).get(PathBuilderViewModel.class);
-        location = new ViewModelProvider(requireActivity()).get(LocationViewModel.class).getLocation();
+        builder = new ViewModelProvider(requireActivity()).get(PathBuilderViewModel.class).getBuilder();
+        start = new ViewModelProvider(requireActivity()).get(StartLocationViewModel.class).getLocation();
+        end = new ViewModelProvider(requireActivity()).get(EndLocationViewModel.class).getLocation();
         ListView listView = binding.bottomList;
         BottomListAble[] b = new BottomListAble[]{};
         adapter = new BottomListAbleAdapter(inflater.getContext(), b);
@@ -38,7 +44,12 @@ public class DestinationLayoutFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        PathBuilder pb = builderViewModel.getBuilder();
-        adapter.setItems(new BottomListAble[]{location});
+        try {
+            adapter.setItems(builder.getPaths(start, end));
+        } catch(PathNotFoundException e) {
+            Log.d("ThisIsATag", e.toString());
+        }
+        adapter.addItemToTop(end);
+        adapter.addItemToTop(start);
     }
 }

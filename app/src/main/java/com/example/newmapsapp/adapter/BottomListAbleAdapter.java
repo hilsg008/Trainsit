@@ -57,6 +57,15 @@ public class BottomListAbleAdapter extends BaseAdapter {
         items[items.length-1] = b;
     }
 
+    public void addItemToTop(BottomListAble b) {
+        BottomListAble[] newItems = new BottomListAble[items.length+1];
+        newItems[0] = b;
+        for(int i=0; i<items.length; i++) {
+            newItems[i+1] = items[i];
+        }
+        items = newItems;
+    }
+
     public void setItems(BottomListAble[] b) {
         items = b;
     }
