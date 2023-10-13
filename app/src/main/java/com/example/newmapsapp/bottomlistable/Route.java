@@ -1,10 +1,19 @@
 package com.example.newmapsapp.bottomlistable;
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 import com.example.newmapsapp.R;
+import com.example.newmapsapp.viewmodel.EndLocationViewModel;
+import com.example.newmapsapp.viewmodel.RouteViewModel;
 
 public class Route extends BottomListAble {
     private Location[] stops;
@@ -34,7 +43,27 @@ public class Route extends BottomListAble {
         textView.setText("cost to 0,0 from " + closestStop.toString());
         TextView otherView = (TextView) v.findViewById(R.id.costToLocation);
         otherView.setText(Integer.toString(closestStop.getCost(Location.ZERO)));
+        v.setOnClickListener(this);
         return v;
+    }
+
+
+    @Override
+    public void onClick(View view) {
+        NavController navController = Navigation.findNavController(view);
+        RouteViewModel routeViewModel = new ViewModelProvider(getActivity(view.getContext())).get(RouteViewModel.class);
+        routeViewModel.setRoute(this);
+        navController.navigate(R.id.go_to_routeLayoutFragmentNav);
+    }
+
+    private FragmentActivity getActivity(Context context) {
+        while (context instanceof ContextWrapper) {
+            if (context instanceof FragmentActivity) {
+                return (FragmentActivity) context;
+            }
+            context = ((ContextWrapper)context).getBaseContext();
+        }
+        return null;
     }
 
     public String getRouteNumber() {
