@@ -23,7 +23,7 @@ public class HomeLayoutFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         MapsFragment fragment = new MapsFragment();
-        getParentFragment().getParentFragmentManager()
+        getChildFragmentManager()
                 .beginTransaction()
                 .add(R.id.map_container, fragment)
                 .commit();

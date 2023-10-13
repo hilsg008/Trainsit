@@ -22,6 +22,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MapsFragment extends SupportMapFragment implements OnMapReadyCallback {
 
@@ -81,5 +82,17 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
             m.position(l.getLatLng());
             mMap.addMarker(m);
         }
+    }
+
+    /**
+     * Draws a line between locs. Start at locs[0], to each loc, end at locs[length-1]
+     * @param locs locations to draw line between
+     */
+    public void drawLine(Location[] locs) {
+        PolylineOptions options = new PolylineOptions();
+        for(Location l:locs) {
+            options.add(l.getLatLng());
+        }
+        mMap.addPolyline(options);
     }
 }

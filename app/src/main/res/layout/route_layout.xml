@@ -17,7 +17,13 @@
         layout="@layout/map_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="5" />
+        android:layout_weight="6" />
+
+    <TextView
+        android:id="@+id/routeName"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="10" />
 
     <ListView
         android:id="@+id/bottomList"
