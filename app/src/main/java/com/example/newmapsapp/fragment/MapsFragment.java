@@ -2,36 +2,60 @@ package com.example.newmapsapp.fragment;
 
 import static com.example.newmapsapp.ExampleClasses.getCorrectSortedLocations;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.newmapsapp.bottomlistable.Location;
-import com.example.newmapsapp.R;
-import com.example.newmapsapp.databinding.HomeLayoutBinding;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsFragment extends FragmentActivity implements OnMapReadyCallback {
+public class MapsFragment extends SupportMapFragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private HomeLayoutBinding binding;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getMapAsync(this);
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void getMapAsync(@NonNull OnMapReadyCallback callback) {
+        super.getMapAsync(callback);
+    }
+
+    @Override
+    public void onAttach(@NonNull Activity activity) {
+        super.onAttach(activity);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        binding = HomeLayoutBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
     }
 
     /**
@@ -51,9 +75,9 @@ public class MapsFragment extends FragmentActivity implements OnMapReadyCallback
 
     public void drawPoints() {
         Location[] locs = getCorrectSortedLocations();
-        for(Location l: locs) {
+        for (Location l : locs) {
             MarkerOptions m = new MarkerOptions();
-            m.icon(BitmapDescriptorFactory.defaultMarker((float)(Math.random()*360)));
+            m.icon(BitmapDescriptorFactory.defaultMarker((float) (Math.random() * 360)));
             m.position(l.getLatLng());
             mMap.addMarker(m);
         }

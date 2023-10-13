@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.newmapsapp.PathNotFoundException;
+import com.example.newmapsapp.R;
 import com.example.newmapsapp.bottomlistable.*;
 import com.example.newmapsapp.adapter.BottomListAbleAdapter;
 import com.example.newmapsapp.builder.PathBuilder;
@@ -31,6 +32,11 @@ public class DestinationLayoutFragment extends Fragment {
     private Location end;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        MapsFragment fragment = new MapsFragment();
+        getParentFragment().getParentFragmentManager()
+                .beginTransaction()
+                .add(R.id.map_container, fragment)
+                .commit();
         binding = DestinationLayoutBinding.inflate(inflater, container, false);
         builder = new ViewModelProvider(requireActivity()).get(PathBuilderViewModel.class).getBuilder();
         start = new ViewModelProvider(requireActivity()).get(StartLocationViewModel.class).getLocation();
