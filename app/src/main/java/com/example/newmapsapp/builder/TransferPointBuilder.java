@@ -39,7 +39,7 @@ public class TransferPointBuilder {
                     Location l = stops[j];
                     if(locationInArray(l, resultArr)) {
                         Route[][] routeToPoint = new Route[1][1];
-                        routeToPoint[0][0] = new Route(Arrays.copyOfRange(stops, 0, j+1));
+                        routeToPoint[0][0] = new Route(Arrays.copyOfRange(stops, 0, j+1), "Route_To_Start");
                         result.add(new TransferPoint(new Path(), new Path[]{new Path(routeToPoint)}, start.getX(), start.getY()));
                         j=stops.length;
                     }
@@ -50,7 +50,7 @@ public class TransferPointBuilder {
                     Location l = stops[j];
                     if(locationInArray(l, resultArr)) {
                         Route[][] routeToPoint = new Route[1][1];
-                        routeToPoint[0][0] = new Route(invertStops(Arrays.copyOfRange(stops, j, stops.length)));
+                        routeToPoint[0][0] = new Route(invertStops(Arrays.copyOfRange(stops, j, stops.length)), "Route_To_End");
                         result.add(new TransferPoint(new Path(), new Path[]{new Path(routeToPoint)}, end.getX(), end.getY()));
                         j=-1;
                     }
@@ -94,14 +94,14 @@ public class TransferPointBuilder {
             int[] indexesInR1 = simplifyIndexes(intArrayListToPrimitive(pointsInR1));
             int[] indexesInR2 = simplifyIndexes(intArrayListToPrimitive(pointsInR2));
             t = new TransferPoint[indexesInR1.length + indexesInR2.length];
-            t = addPoints(t, stops, indexesInR1, 0);
-            t = addPoints(t, stops2, indexesInR2, indexesInR1.length);
+            t = addPoints(t, stops, indexesInR1, 0, r1.getRouteNumber());
+            t = addPoints(t, stops2, indexesInR2, indexesInR1.length, r2.getRouteNumber());
         } else {
             if(lowestCost < Integer.MAX_VALUE) {
                 //Creates 2 transfer points where the only path is walking from the point to the other.
                 t = new TransferPoint[]{
-                        new TransferPoint(new Path(), new Path[]{new Path(new Route[][]{{new Route(new Location[]{stops[indexInStops], stops2[indexInStops2]})}})}, stops[indexInStops].getX(), stops[indexInStops].getY()),
-                        new TransferPoint(new Path(), new Path[]{new Path(new Route[][]{{new Route(new Location[]{stops2[indexInStops2], stops[indexInStops]})}})}, stops2[indexInStops2].getX(), stops2[indexInStops2].getY())
+                        new TransferPoint(new Path(), new Path[]{new Path(new Route[][]{{new Route(new Location[]{stops[indexInStops], stops2[indexInStops2]}, "Between " + r1.getRouteNumber() + ", " + r2.getRouteNumber())}})}, stops[indexInStops].getX(), stops[indexInStops].getY()),
+                        new TransferPoint(new Path(), new Path[]{new Path(new Route[][]{{new Route(new Location[]{stops2[indexInStops2], stops[indexInStops]}, "Between " + r1.getRouteNumber() + ", " + r2.getRouteNumber())}})}, stops2[indexInStops2].getX(), stops2[indexInStops2].getY())
                 };
             } else {
                 t = new TransferPoint[0];
@@ -118,31 +118,31 @@ public class TransferPointBuilder {
      * @param indexToStartAt the index in t to start at
      * @return TransferPoint[] containing any points in indexes
      */
-    private static TransferPoint[] addPoints(TransferPoint[] t, Location[] stops, int[] indexes, int indexToStartAt) {
+    private static TransferPoint[] addPoints(TransferPoint[] t, Location[] stops, int[] indexes, int indexToStartAt, String routeNumber) {
         if(indexes.length == 1) {
             t[indexToStartAt] = new TransferPoint(new Path(), new Path[]{
-                    new Path(new Route[][]{{new Route(invertStops(Arrays.copyOfRange(stops, 0, indexes[0]+1)))}}),
-                    new Path(new Route[][]{{new Route(Arrays.copyOfRange(stops, indexes[0], stops.length))}})},
+                    new Path(new Route[][]{{new Route(invertStops(Arrays.copyOfRange(stops, 0, indexes[0]+1)), routeNumber)}}),
+                    new Path(new Route[][]{{new Route(Arrays.copyOfRange(stops, indexes[0], stops.length), routeNumber)}})},
                         stops[indexes[0]].getX(), stops[indexes[0]].getY());
             t[indexToStartAt].removeEmptyPaths();
             return t;
         }
         t[indexToStartAt] = new TransferPoint(new Path(), new Path[]{
-            new Path(new Route[][]{{new Route(invertStops(Arrays.copyOfRange(stops, 0, indexes[0]+1)))}}),
-            new Path(new Route[][]{{new Route(Arrays.copyOfRange(stops, indexes[0], indexes[1]+1))}})},
+            new Path(new Route[][]{{new Route(invertStops(Arrays.copyOfRange(stops, 0, indexes[0]+1)), routeNumber)}}),
+            new Path(new Route[][]{{new Route(Arrays.copyOfRange(stops, indexes[0], indexes[1]+1), routeNumber)}})},
                 stops[indexes[0]].getX(), stops[indexes[0]].getY());
         t[indexToStartAt].removeEmptyPaths();
         for(int i=1; i<indexes.length-1; i++) {
             t[indexToStartAt+i] = new TransferPoint(new Path(), new Path[]{
-                new Path(new Route[][]{{new Route(Arrays.copyOfRange(stops, indexes[i], indexes[i+1]+1))}}),
-                new Path(new Route[][]{{new Route(invertStops(Arrays.copyOfRange(stops, indexes[i-1], indexes[i]+1)))}})},
+                new Path(new Route[][]{{new Route(Arrays.copyOfRange(stops, indexes[i], indexes[i+1]+1), routeNumber)}}),
+                new Path(new Route[][]{{new Route(invertStops(Arrays.copyOfRange(stops, indexes[i-1], indexes[i]+1)), routeNumber)}})},
                     stops[indexes[i]].getX(), stops[indexes[i]].getY());
             t[indexToStartAt+i].removeEmptyPaths();
         }
         int temp = indexes.length-1;
         t[indexToStartAt+temp] = new TransferPoint(new Path(), new Path[]{
-            new Path(new Route[][]{{new Route(Arrays.copyOfRange(stops, indexes[temp], stops.length))}}),
-            new Path(new Route[][]{{new Route(invertStops(Arrays.copyOfRange(stops, indexes[temp-1], indexes[temp]+1)))}})},
+            new Path(new Route[][]{{new Route(Arrays.copyOfRange(stops, indexes[temp], stops.length), routeNumber)}}),
+            new Path(new Route[][]{{new Route(invertStops(Arrays.copyOfRange(stops, indexes[temp-1], indexes[temp]+1)), routeNumber)}})},
                 stops[indexes[temp]].getX(), stops[indexes[temp]].getY());
         t[indexToStartAt+temp].removeEmptyPaths();
         return t;
