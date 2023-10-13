@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.newmapsapp.R;
 import com.example.newmapsapp.bottomlistable.*;
 import com.example.newmapsapp.adapter.BottomListAbleAdapter;
 import com.example.newmapsapp.databinding.DestinationLayoutBinding;
@@ -19,6 +20,11 @@ public class DestinationLayoutFragment extends Fragment {
     private DestinationLayoutBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        MapsFragment fragment = new MapsFragment();
+        getParentFragment().getParentFragmentManager()
+                .beginTransaction()
+                .add(R.id.map_container, fragment)
+                .commit();
         binding = DestinationLayoutBinding.inflate(inflater, container, false);
         ListView listView = binding.bottomList;
         BottomListAble[] b = new BottomListAble[]{new BottomListAble(), new BottomListAble(), new BottomListAble(), new BottomListAble()};
