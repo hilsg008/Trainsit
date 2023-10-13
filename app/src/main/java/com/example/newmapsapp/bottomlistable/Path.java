@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.newmapsapp.R;
 import com.example.newmapsapp.adapter.LocationAdapter;
+import com.example.newmapsapp.adapter.RouteAdapter;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -113,7 +114,7 @@ public class Path extends BottomListAble {
     public View getView(LayoutInflater layoutInflater) {
         View v = layoutInflater.inflate(R.layout.path_item_layout, null);
         RecyclerView recyclerView = v.findViewById(R.id.locationList);
-        recyclerView.setAdapter(new LocationAdapter(getLocs()));
+        recyclerView.setAdapter(new RouteAdapter(routes));
         LinearLayoutManager l = new LinearLayoutManager(layoutInflater.getContext(),LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(l);
         return v;

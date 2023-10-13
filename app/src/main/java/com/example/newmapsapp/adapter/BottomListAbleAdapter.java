@@ -10,9 +10,11 @@ import android.widget.TextView;
 import com.example.newmapsapp.bottomlistable.BottomListAble;
 import com.example.newmapsapp.R;
 
+import java.util.Arrays;
+
 public class BottomListAbleAdapter extends BaseAdapter {
     Context context;
-    BottomListAble[] items;
+    private BottomListAble[] items;
     LayoutInflater layoutInflater;
 
     public BottomListAbleAdapter(Context ctx, BottomListAble[] b) {
@@ -48,5 +50,23 @@ public class BottomListAbleAdapter extends BaseAdapter {
         } else {
             return defaultView;
         }
+    }
+
+    public void addItem(BottomListAble b) {
+        items = Arrays.copyOf(items, items.length+1);
+        items[items.length-1] = b;
+    }
+
+    public void addItemToTop(BottomListAble b) {
+        BottomListAble[] newItems = new BottomListAble[items.length+1];
+        newItems[0] = b;
+        for(int i=0; i<items.length; i++) {
+            newItems[i+1] = items[i];
+        }
+        items = newItems;
+    }
+
+    public void setItems(BottomListAble[] b) {
+        items = b;
     }
 }

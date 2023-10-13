@@ -8,13 +8,19 @@ import com.example.newmapsapp.R;
 
 public class Route extends BottomListAble {
     private Location[] stops;
+    private String routeNumber;
 
     public Route(Location[] stopLocations) {
+        this(stopLocations, "no_name");
+    }
+
+    public Route(Location[] stopLocations, String name) {
+        routeNumber = name;
         stops = stopLocations;
     }
 
     public Route(double[][] stopLocations) {
-        stops = new Location[stopLocations.length];
+        this(new Location[stopLocations.length], "no_name");
         for(int i=0; i<stops.length; i++) {
             stops[i] = new Location(stopLocations[i][0], stopLocations[i][1]);
         }
@@ -29,6 +35,10 @@ public class Route extends BottomListAble {
         TextView otherView = (TextView) v.findViewById(R.id.costToLocation);
         otherView.setText(Integer.toString(closestStop.getCost(Location.ZERO)));
         return v;
+    }
+
+    public String getRouteNumber() {
+        return routeNumber;
     }
 
     public Location getClosestStop(Location l) {
