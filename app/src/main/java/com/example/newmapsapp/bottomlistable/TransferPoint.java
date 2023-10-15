@@ -78,6 +78,47 @@ public class TransferPoint extends Location implements Comparable<TransferPoint>
         return new TransferPoint(pathToPoint, otherPaths, getX(),getY());
     }
 
+    public TransferPoint combineDuplicates(TransferPoint t) {
+        Path[] otherPaths = t.getPaths();
+        Path[] combined = Arrays.copyOf(paths, paths.length+otherPaths.length);
+        for(int i=0; i<otherPaths.length; i++) {
+            combined[paths.length+i] = otherPaths[i];
+        }
+        ArrayList<Path> result = new ArrayList<>();
+        for(Path p: combined) {
+            int index = getIndexInPaths(result, p);
+            if(index == -1) {
+                result.add(p);
+            } else {
+                Path temp = result.remove(index);
+                temp.setRoutes(combine(temp.getRoutes(), p.getRoutes()));
+                result.add(temp);
+            }
+        }
+        return new TransferPoint(pathToPoint, otherPaths, getX(),getY());
+    }
+
+    private static Route[][] combine(Route[][] r1, Route[][] r2) {
+        Route[][] result = Arrays.copyOf(r1, r1.length+r2.length);
+        for(int i=0; i<r2.length; i++) {
+            result[r1.length+i] = r2[i];
+        }
+        return result;
+    }
+
+    private static int getIndexInPaths(ArrayList<Path> paths, Path path) {
+        Path[] result = paths.toArray(new Path[0]);
+        for(int i=0; i<result.length; i++) {
+            if(isDuplicatePath(result[i], path)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private static boolean isDuplicatePath(Path p1, Path p2) {
+        return p1.getRoutes()[0][0].equals(p2.getRoutes()[0][0]);
+    }
     /**
      * Removes and returns the path with lowest cost
      * This includes the path to this point.
