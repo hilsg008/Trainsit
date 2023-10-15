@@ -144,8 +144,9 @@ public class Path extends BottomListAble {
                 s += route.getRouteNumber();
                 s += "/";
             }
+            s = s.substring(0,s.length()-1);
+            result += s;
             result += " - ";
-
         }
         result = result.substring(0, result.length()-3);
         return new Route(getLocs(), result);
