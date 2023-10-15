@@ -1,14 +1,21 @@
 package com.example.newmapsapp.bottomlistable;
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.newmapsapp.R;
 import com.example.newmapsapp.adapter.LocationAdapter;
 import com.example.newmapsapp.adapter.RouteAdapter;
+import com.example.newmapsapp.viewmodel.RouteViewModel;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -113,10 +120,44 @@ public class Path extends BottomListAble {
     @Override
     public View getView(LayoutInflater layoutInflater) {
         View v = layoutInflater.inflate(R.layout.path_item_layout, null);
-        RecyclerView recyclerView = v.findViewById(R.id.locationList);
+        /*RecyclerView recyclerView = v.findViewById(R.id.routeList);
         recyclerView.setAdapter(new RouteAdapter(routes));
         LinearLayoutManager l = new LinearLayoutManager(layoutInflater.getContext(),LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(l);
+        recyclerView.setLayoutManager(l);*/
+        v.setOnClickListener(this);
         return v;
+    }
+
+    @Override
+    public void onClick(View view) {
+        NavController navController = Navigation.findNavController(view);
+        RouteViewModel routeViewModel = new ViewModelProvider(getActivity(view.getContext())).get(RouteViewModel.class);
+        routeViewModel.setRoute(toRoute());
+        navController.navigate(R.id.go_to_routeLayoutFragmentNav);
+    }
+
+    private Route toRoute() {
+        String result = "";
+        for(Route[] r: routes) {
+            String s = "Route ";
+            for(Route route: r) {
+                s += route.getRouteNumber();
+                s += "/";
+            }
+            result += " - ";
+
+        }
+        result = result.substring(0, result.length()-3);
+        return new Route(getLocs(), result);
+    }
+
+    private FragmentActivity getActivity(Context context) {
+        while (context instanceof ContextWrapper) {
+            if (context instanceof FragmentActivity) {
+                return (FragmentActivity) context;
+            }
+            context = ((ContextWrapper)context).getBaseContext();
+        }
+        return null;
     }
 }

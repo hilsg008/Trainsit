@@ -10,8 +10,12 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.newmapsapp.R;
+import com.example.newmapsapp.adapter.LocationAdapter;
+import com.example.newmapsapp.adapter.RouteAdapter;
 import com.example.newmapsapp.viewmodel.EndLocationViewModel;
 import com.example.newmapsapp.viewmodel.RouteViewModel;
 
@@ -37,12 +41,11 @@ public class Route extends BottomListAble {
 
     @Override
     public View getView(LayoutInflater layoutInflater) {
-        Location closestStop = getClosestStop(Location.ZERO);
-        View v = closestStop.getView(layoutInflater);
-        TextView textView = (TextView) v.findViewById(R.id.location);
-        textView.setText("cost to 0,0 from " + closestStop.toString());
-        TextView otherView = (TextView) v.findViewById(R.id.costToLocation);
-        otherView.setText(Integer.toString(closestStop.getCost(Location.ZERO)));
+        View v = layoutInflater.inflate(R.layout.route_item_layout, null);
+        /*RecyclerView recyclerView = v.findViewById(R.id.locationList);
+        recyclerView.setAdapter(new LocationAdapter(getStops()));
+        LinearLayoutManager l = new LinearLayoutManager(layoutInflater.getContext(),LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(l);*/
         v.setOnClickListener(this);
         return v;
     }
