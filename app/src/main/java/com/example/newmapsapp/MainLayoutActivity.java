@@ -6,12 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.newmapsapp.bottomlistable.Location;
+import com.example.newmapsapp.bottomlistable.Route;
 import com.example.newmapsapp.builder.PathBuilder;
 import com.example.newmapsapp.builder.TransferPointBuilder;
 import com.example.newmapsapp.databinding.MainLayoutBinding;
 import com.example.newmapsapp.viewmodel.EndLocationViewModel;
 import com.example.newmapsapp.viewmodel.LocationViewModel;
 import com.example.newmapsapp.viewmodel.PathBuilderViewModel;
+import com.example.newmapsapp.viewmodel.RouteViewModel;
 import com.example.newmapsapp.viewmodel.StartLocationViewModel;
 
 public class MainLayoutActivity extends AppCompatActivity {
@@ -20,6 +22,7 @@ public class MainLayoutActivity extends AppCompatActivity {
     private PathBuilderViewModel builderViewModel;
     private StartLocationViewModel startViewModel;
     private EndLocationViewModel endViewModel;
+    private RouteViewModel routeViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,8 @@ public class MainLayoutActivity extends AppCompatActivity {
     }
 
     private void createViewModels() {
+        routeViewModel = new ViewModelProvider(this).get(RouteViewModel.class);
+        routeViewModel.setRoute(new Route(new Location[0]));
         builderViewModel = new ViewModelProvider(this).get(PathBuilderViewModel.class);
         builderViewModel.setBuilder(new PathBuilder(TransferPointBuilder.getTransferPoints(ExampleClasses.getRoutes())));
         startViewModel = new ViewModelProvider(this).get(StartLocationViewModel.class);

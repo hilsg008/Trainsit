@@ -67,14 +67,14 @@ public class ExampleClasses {
     public static Route[] getRoutes() {
         Location[] locs = getLocations();
         Route[] routes = new Route[8];
-        routes[0] = new Route(new Location[]{locs[9], locs[8], locs[3], locs[0]}, "Route 0");
-        routes[1] = new Route(new Location[]{locs[15], locs[16], locs[8], locs[7], locs[3], locs[4], locs[1]}, "Route 1");
-        routes[2] = new Route(new Location[]{locs[9], locs[16], locs[11], locs[6], locs[2]}, "Route 2");
-        routes[3] = new Route(new Location[]{locs[14], locs[11], locs[5], locs[4]}, "Route 3");
-        routes[4] = new Route(new Location[]{locs[19], locs[9], locs[18], locs[17], locs[15], locs[14], locs[13]}, "Route 4");
-        routes[5] = new Route(new Location[]{locs[13], locs[12], locs[11], locs[5], locs[10], locs[8]}, "Route 5");
-        routes[6] = new Route(new Location[]{locs[0], locs[1], locs[2], locs[6], locs[13], locs[20]}, "Route 6");
-        routes[7] = new Route(new Location[]{locs[15], locs[16], locs[11], locs[5], locs[4], locs[1]}, "Route 7");
+        routes[0] = new Route(new Location[]{locs[9], locs[8], locs[3], locs[0]}, "0");
+        routes[1] = new Route(new Location[]{locs[15], locs[16], locs[8], locs[7], locs[3], locs[4], locs[1]}, "1");
+        routes[2] = new Route(new Location[]{locs[9], locs[16], locs[11], locs[6], locs[2]}, "2");
+        routes[3] = new Route(new Location[]{locs[14], locs[11], locs[5], locs[4]}, "3");
+        routes[4] = new Route(new Location[]{locs[19], locs[9], locs[18], locs[17], locs[15], locs[14], locs[13]}, "4");
+        routes[5] = new Route(new Location[]{locs[13], locs[12], locs[11], locs[5], locs[10], locs[8]}, "5");
+        routes[6] = new Route(new Location[]{locs[0], locs[1], locs[2], locs[6], locs[13], locs[20]}, "6");
+        routes[7] = new Route(new Location[]{locs[15], locs[16], locs[11], locs[5], locs[4], locs[1]}, "7");
         return routes;
     }
 

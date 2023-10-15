@@ -198,7 +198,7 @@ public class TransferPointBuilder {
             if(index == -1) {
                 result.add(t);
             } else {
-                result.add(result.remove(index).add(t));
+                result.add(result.remove(index).combineDuplicates(t));
             }
         }
         return result.toArray(new TransferPoint[result.size()]);

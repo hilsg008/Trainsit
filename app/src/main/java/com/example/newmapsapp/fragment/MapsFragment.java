@@ -14,18 +14,29 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.newmapsapp.bottomlistable.Location;
+import com.example.newmapsapp.bottomlistable.Route;
+import com.example.newmapsapp.viewmodel.RouteViewModel;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MapsFragment extends SupportMapFragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private Route route;
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -71,15 +82,47 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
         drawPoints();
+        drawRoute();
     }
 
-    public void drawPoints() {
+    public void setRoute(Route r) {
+        route = r;
+    }
+
+    private void drawPoints() {
         Location[] locs = getCorrectSortedLocations();
         for (Location l : locs) {
             MarkerOptions m = new MarkerOptions();
             m.icon(BitmapDescriptorFactory.defaultMarker((float) (Math.random() * 360)));
             m.position(l.getLatLng());
             mMap.addMarker(m);
+        }
+    }
+
+    /**
+     * Draws the route stored in RouteViewModel
+     */
+    private void drawRoute() {
+        if(route != null) {
+            Location[] locs = route.getStops();
+            LatLng[] latLngs = new LatLng[locs.length];
+            PolylineOptions options = new PolylineOptions();
+            for(int i=0; i<locs.length; i++) {
+                latLngs[i] = locs[i].getLatLng();
+            }
+            options.add(latLngs);
+            mMap.addPolyline(options);
+            setCamera(latLngs);
+        }
+    }
+
+    private void setCamera(LatLng[] latLngs) {
+        if(latLngs.length > 0) {
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            for(LatLng l: latLngs) {
+                builder.include(l);
+            }
+            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 100));
         }
     }
 }

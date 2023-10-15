@@ -13,6 +13,9 @@
         <action
             android:id="@+id/go_to_destinationLayoutFragmentNav"
             app:destination="@id/destinationLayoutFragmentNav" />
+        <action
+            android:id="@+id/go_to_routeLayoutFragmentNav"
+            app:destination="@id/routeLayoutFragmentNav" />
     </fragment>
     <fragment
         android:id="@+id/destinationLayoutFragmentNav"
@@ -20,7 +23,22 @@
         android:label="destination_layout"
         tools:layout="@layout/destination_layout">
         <action
-            android:id="@+id/go_to_homeFragmentNav"
+            android:id="@+id/go_to_homeLayoutFragmentNav"
             app:destination="@id/homeLayoutFragmentNav" />
+        <action
+            android:id="@+id/go_to_routeLayoutFragmentNav"
+            app:destination="@id/routeLayoutFragmentNav" />
+    </fragment>
+    <fragment
+        android:id="@+id/routeLayoutFragmentNav"
+        android:name="com.example.newmapsapp.fragment.RouteLayoutFragment"
+        android:label="route_layout"
+        tools:layout="@layout/route_layout">
+        <action
+            android:id="@+id/go_to_homeLayoutFragmentNav"
+            app:destination="@id/homeLayoutFragmentNav" />
+        <action
+            android:id="@+id/go_to_destinationLayoutFragmentNav"
+            app:destination="@id/destinationLayoutFragmentNav" />
     </fragment>
 </navigation>

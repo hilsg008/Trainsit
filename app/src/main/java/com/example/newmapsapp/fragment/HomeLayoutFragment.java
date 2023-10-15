@@ -23,13 +23,13 @@ public class HomeLayoutFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         MapsFragment fragment = new MapsFragment();
-        getParentFragment().getParentFragmentManager()
+        getChildFragmentManager()
                 .beginTransaction()
                 .add(R.id.map_container, fragment)
                 .commit();
         binding = HomeLayoutBinding.inflate(inflater, container, false);
         ListView listView = binding.bottomList;
-        BottomListAble[] b = new BottomListAble[]{new BottomListAble(), ExampleClasses.getLocations()[15], ExampleClasses.getRoutes()[0] ,new Path(new Route[][]{{new Route(ExampleClasses.getLocations())}})};
+        BottomListAble[] b = new BottomListAble[]{new BottomListAble(), ExampleClasses.getLocations()[15], ExampleClasses.getRoutes()[0], new Path(new Route[][]{{new Route(ExampleClasses.getLocations(), "name")}})};
         listView.setAdapter(new BottomListAbleAdapter(inflater.getContext(), b));
         return binding.getRoot();
     }
