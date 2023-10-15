@@ -26,15 +26,17 @@ import com.example.newmapsapp.viewmodel.RouteViewModel;
 public class RouteLayoutFragment extends Fragment {
 
     private RouteLayoutBinding binding;
+    private MapsFragment map;
     private Route route;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        MapsFragment fragment = new MapsFragment();
+        map = new MapsFragment();
+        route = new ViewModelProvider(requireActivity()).get(RouteViewModel.class).getRoute();
+        map.setRoute(route);
         getChildFragmentManager()
                 .beginTransaction()
-                .add(R.id.map_container, fragment)
+                .add(R.id.map_container, map)
                 .commit();
-        route = new ViewModelProvider(requireActivity()).get(RouteViewModel.class).getRoute();
         binding = RouteLayoutBinding.inflate(inflater, container, false);
         TextView routeName = binding.routeName;
         routeName.setText(route.getRouteNumber());
@@ -46,6 +48,5 @@ public class RouteLayoutFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
     }
 }
