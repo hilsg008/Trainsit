@@ -109,6 +109,10 @@ public class Path extends BottomListAble {
         return new Path(newRoutes);
     }
 
+    public void setRoutes(Route[][] newRoutes) {
+        routes = newRoutes;
+    }
+
     public String toString() {
         String s = "";
         for(Route[] r: routes) {

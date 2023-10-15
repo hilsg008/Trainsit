@@ -133,21 +133,13 @@ public class Route extends BottomListAble {
         if(stopsEqual(stops2)) {
             return true;
         }
-        if(stopsEqual(reverseStops(stops2))) {
-            return true;
-        }
         return false;
     }
 
-    private static Location[] reverseStops(Location[] stops) {
-        Location[] result = new Location[stops.length];
-        for(int i=0; i<stops.length; i++) {
-            result[i] = stops[stops.length-1-i];
-        }
-        return result;
-    }
-
     private boolean stopsEqual(Location[] stops2) {
+        if(stops2.length != stops.length) {
+            return false;
+        }
         for(int i=0; i<stops.length; i++) {
             if(!stops[i].equals(stops2[i])) {
                 return false;
