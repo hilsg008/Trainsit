@@ -24,6 +24,8 @@ public class PathBuilder {
     }
 
     public Path[] getPaths(Location start, Location goal) throws PathNotFoundException {
+        //Stores the TransferPoints so they can be reset before returning result
+        TransferPoint[] temp = transferPoints;
         //Initializes the array of costs from each point (-1 if unknown, -2 if already searched)
         Arrays.fill(costFromTransferPoints, -1);
         //Initialize all costs
@@ -61,6 +63,7 @@ public class PathBuilder {
                 if(methodsFound.size() == 0) {
                     throw new PathNotFoundException(start, goal);
                 } else {
+                    transferPoints = temp;
                     return methodsFound.toArray(new Path[methodsFound.size()]);
                 }
             }
@@ -80,6 +83,7 @@ public class PathBuilder {
                 }
             }
         }
+        transferPoints = temp;
         return methodsFound.toArray(new Path[methodsFound.size()]);
     }
 
