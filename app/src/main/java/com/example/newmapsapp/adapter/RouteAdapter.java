@@ -13,10 +13,18 @@ import com.example.newmapsapp.bottomlistable.Location;
 import com.example.newmapsapp.bottomlistable.Route;
 
 public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> {
+
+    private OnItemClickListener listener;
+
+    public interface OnItemClickListener {
+        void onItemClick(Route[] r);
+    }
+
     private Route[][] items;
 
-    public RouteAdapter(Route[][] items) {
+    public RouteAdapter(Route[][] items, OnItemClickListener clickToPath) {
         this.items = items;
+        listener = clickToPath;
     }
 
     @Override
@@ -36,6 +44,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
         s = s.substring(0,s.length()-1);
         holder.text.setText(s);
         holder.setColor(getColor(position));
+        holder.bind(items[position], listener);
     }
 
     private int getColor(int position) {
@@ -55,6 +64,15 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.ViewHolder> 
             super(itemView);
             item = itemView;
             text = (TextView) itemView.findViewById(R.id.routeInPathList);
+        }
+
+        public void bind(Route[] r, OnItemClickListener listener) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onItemClick(r);
+                }
+            });
         }
 
         public void setColor(int color) {
