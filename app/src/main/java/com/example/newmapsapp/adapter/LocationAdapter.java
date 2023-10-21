@@ -10,12 +10,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.newmapsapp.ExampleClasses;
 import com.example.newmapsapp.bottomlistable.Location;
 import com.example.newmapsapp.R;
+import com.example.newmapsapp.bottomlistable.Route;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
-    private Location[] items;
 
-    public LocationAdapter(Location[] items) {
+    public interface OnItemClickListener {
+        void onItemClick(Location l);
+    }
+
+    private Location[] items;
+    private OnItemClickListener listener;
+
+    public LocationAdapter(Location[] items, OnItemClickListener clickToRoute) {
         this.items = items;
+        listener = clickToRoute;
     }
 
     @Override
@@ -29,6 +37,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.text.setText(Integer.toString(items[position].getCost(Location.ZERO)));
         holder.setColor(getColor(position));
+        holder.bind(items[position], listener);
     }
 
     private int getColor(int position) {
@@ -48,6 +57,15 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
             super(itemView);
             item = itemView;
             text = (TextView) itemView.findViewById(R.id.locationInPathList);
+        }
+
+        public void bind(Location l, LocationAdapter.OnItemClickListener listener) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onItemClick(l);
+                }
+            });
         }
 
         public void setColor(int color) {
