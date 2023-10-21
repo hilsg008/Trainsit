@@ -42,21 +42,21 @@ public class Route extends BottomListAble {
     @Override
     public View getView(LayoutInflater layoutInflater) {
         View v = layoutInflater.inflate(R.layout.route_item_layout, null);
-        /*RecyclerView recyclerView = v.findViewById(R.id.locationList);
-        recyclerView.setAdapter(new LocationAdapter(getStops()));
+        RecyclerView recyclerView = v.findViewById(R.id.locationList);
+        Route route = this;
+        recyclerView.setAdapter(new LocationAdapter(getStops(), new LocationAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Location l) {
+                NavController navController = Navigation.findNavController(v);
+                RouteViewModel routeViewModel = new ViewModelProvider(getActivity(v.getContext())).get(RouteViewModel.class);
+                routeViewModel.setRoute(route);
+                navController.navigate(R.id.go_to_routeLayoutFragmentNav);
+            }
+        }));
         LinearLayoutManager l = new LinearLayoutManager(layoutInflater.getContext(),LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(l);*/
+        recyclerView.setLayoutManager(l);
         v.setOnClickListener(this);
         return v;
-    }
-
-
-    @Override
-    public void onClick(View view) {
-        NavController navController = Navigation.findNavController(view);
-        RouteViewModel routeViewModel = new ViewModelProvider(getActivity(view.getContext())).get(RouteViewModel.class);
-        routeViewModel.setRoute(this);
-        navController.navigate(R.id.go_to_routeLayoutFragmentNav);
     }
 
     private FragmentActivity getActivity(Context context) {
