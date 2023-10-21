@@ -42,10 +42,8 @@ public class BottomListAbleAdapter extends BaseAdapter {
         View defaultView = items[i].getView(layoutInflater);
         if(defaultView == null) {
             View convertView = layoutInflater.inflate(R.layout.bottom_listable_layout, null);
-            TextView test = (TextView) convertView.findViewById(R.id.method);
-            TextView test2 = (TextView) convertView.findViewById(R.id.time);
-            test.setText("bruh");
-            test2.setText("lol");
+            TextView test = (TextView) convertView.findViewById(R.id.listabletext);
+            test.setText("EMPTY BOTTOMLISTABLE");
             return convertView;
         } else {
             return defaultView;
