@@ -40,9 +40,9 @@ public class PathBuilder {
         if(!start.equals(nearestPoint)) {
             Route[][] walkToTransferPoint = new Route[1][1];
             walkToTransferPoint[0][0] = new Route(new Location[]{start, nearestPoint});
-            nearestPoint.setPathToPoint(new Path(walkToTransferPoint));
+            nearestPoint.setPathToPoint(new Path(walkToTransferPoint), goal);
         } else {
-            nearestPoint.setPathToPoint(new Path());
+            nearestPoint.setPathToPoint(new Path(), goal);
         }
 
         costFromTransferPoints[nearestPointIndex] = nearestPoint.getCost(start);
@@ -78,7 +78,7 @@ public class PathBuilder {
                 if(nextPointFound.equals(goal)) {
                     methodsFound.add(pathToNewPoint);
                 } else {
-                    nextPointFound.setPathToPoint(pathToNewPoint);
+                    nextPointFound.setPathToPoint(pathToNewPoint, goal);
                     costFromTransferPoints[indexOfPointFound] = nextPointFound.getLowestCost();
                 }
             }

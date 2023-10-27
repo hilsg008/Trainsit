@@ -13,28 +13,23 @@ public class TransferPoint extends Location implements Comparable<TransferPoint>
     private int[] costs;
     private int costToPoint;
     private Path pathToPoint;
-    private boolean isInitialized;
-    private Location goal;
     public TransferPoint(Path pathToThisPoint, Path[] pathsFromPoint, double x, double y) {
         super(x,y);
         paths = pathsFromPoint;
         pathToPoint = pathToThisPoint;
         costToPoint = pathToPoint.getCost();
-        isInitialized = false;
         costs = new int[paths.length];
     }
 
     public void initializeCosts(Location goalLocation) {
-        isInitialized = true;
-        goal = goalLocation;
         for(int i=0; i<costs.length; i++) {
-            costs[i] = costToPoint + paths[i].getCost() + paths[i].getLastPoint().getCost(goal);
+            costs[i] = costToPoint + paths[i].getCost() + paths[i].getLastPoint().getCost(goalLocation);
         }
     }
 
-    public void setPathToPoint(Path p) {
+    public void setPathToPoint(Path p, Location goalLocation) {
         pathToPoint = p;
-        initializeCosts(goal);
+        initializeCosts(goalLocation);
     }
 
     /**
