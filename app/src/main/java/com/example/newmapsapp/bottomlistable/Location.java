@@ -1,6 +1,6 @@
 package com.example.newmapsapp.bottomlistable;
 
-import android.app.Activity;
+
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.view.LayoutInflater;
@@ -14,7 +14,6 @@ import androidx.navigation.Navigation;
 
 import com.example.newmapsapp.R;
 import com.example.newmapsapp.viewmodel.EndLocationViewModel;
-import com.example.newmapsapp.viewmodel.LocationViewModel;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Location extends BottomListAble {
@@ -61,7 +60,7 @@ public class Location extends BottomListAble {
     }
 
     public int getCost(Location l) {
-        return(int)(100*Math.sqrt(Math.pow(l.getX()-getX(),2) + Math.pow(l.getY()-getY(),2)));
+        return getCost(l.getLatLng());
     }
 
     public int getCost(LatLng l) {
@@ -82,8 +81,7 @@ public class Location extends BottomListAble {
     @Override
     public void onClick(View view) {
         NavController navController = Navigation.findNavController(view);
-        EndLocationViewModel locationViewModel = new ViewModelProvider(getActivity(view.getContext())).get(EndLocationViewModel.class);
-        locationViewModel.setLocation(this);
+        new ViewModelProvider(getActivity(view.getContext())).get(EndLocationViewModel.class).setLocation(this);
         navController.navigate(R.id.go_to_destinationLayoutFragmentNav);
     }
 

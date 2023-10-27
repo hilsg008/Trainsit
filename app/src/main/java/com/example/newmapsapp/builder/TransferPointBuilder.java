@@ -87,27 +87,24 @@ public class TransferPointBuilder {
                 }
             }
         }
-        Location[] locs;
-        TransferPoint[] t;
-        Route[][] routes = new Route[][]{{r1,r2}};
         if(madeContact) {
             int[] indexesInR1 = simplifyIndexes(intArrayListToPrimitive(pointsInR1));
             int[] indexesInR2 = simplifyIndexes(intArrayListToPrimitive(pointsInR2));
-            t = new TransferPoint[indexesInR1.length + indexesInR2.length];
-            t = addPoints(t, stops, indexesInR1, 0, r1.getRouteNumber());
-            t = addPoints(t, stops2, indexesInR2, indexesInR1.length, r2.getRouteNumber());
+            TransferPoint[] t = new TransferPoint[indexesInR1.length + indexesInR2.length];
+            addPoints(t, stops, indexesInR1, 0, r1.getRouteNumber());
+            addPoints(t, stops2, indexesInR2, indexesInR1.length, r2.getRouteNumber());
+            return t;
         } else {
             if(lowestCost < Integer.MAX_VALUE) {
                 //Creates 2 transfer points where the only path is walking from the point to the other.
-                t = new TransferPoint[]{
+                return new TransferPoint[]{
                         new TransferPoint(new Path(), new Path[]{new Path(new Route[][]{{new Route(new Location[]{stops[indexInStops], stops2[indexInStops2]}, "Between " + r1.getRouteNumber() + ", " + r2.getRouteNumber())}})}, stops[indexInStops].getX(), stops[indexInStops].getY()),
                         new TransferPoint(new Path(), new Path[]{new Path(new Route[][]{{new Route(new Location[]{stops2[indexInStops2], stops[indexInStops]}, "Between " + r1.getRouteNumber() + ", " + r2.getRouteNumber())}})}, stops2[indexInStops2].getX(), stops2[indexInStops2].getY())
                 };
             } else {
-                t = new TransferPoint[0];
+                return new TransferPoint[0];
             }
         }
-        return t;
     }
 
     /**
@@ -116,16 +113,15 @@ public class TransferPointBuilder {
      * @param stops the stops for the route being made into points
      * @param indexes the indexes in stops to add to t
      * @param indexToStartAt the index in t to start at
-     * @return TransferPoint[] containing any points in indexes
      */
-    private static TransferPoint[] addPoints(TransferPoint[] t, Location[] stops, int[] indexes, int indexToStartAt, String routeNumber) {
+    private static void addPoints(TransferPoint[] t, Location[] stops, int[] indexes, int indexToStartAt, String routeNumber) {
         if(indexes.length == 1) {
             t[indexToStartAt] = new TransferPoint(new Path(), new Path[]{
                     new Path(new Route[][]{{new Route(invertStops(Arrays.copyOfRange(stops, 0, indexes[0]+1)), routeNumber)}}),
                     new Path(new Route[][]{{new Route(Arrays.copyOfRange(stops, indexes[0], stops.length), routeNumber)}})},
                         stops[indexes[0]].getX(), stops[indexes[0]].getY());
             t[indexToStartAt].removeEmptyPaths();
-            return t;
+            return;
         }
         t[indexToStartAt] = new TransferPoint(new Path(), new Path[]{
             new Path(new Route[][]{{new Route(invertStops(Arrays.copyOfRange(stops, 0, indexes[0]+1)), routeNumber)}}),
@@ -145,23 +141,25 @@ public class TransferPointBuilder {
             new Path(new Route[][]{{new Route(invertStops(Arrays.copyOfRange(stops, indexes[temp-1], indexes[temp]+1)), routeNumber)}})},
                 stops[indexes[temp]].getX(), stops[indexes[temp]].getY());
         t[indexToStartAt+temp].removeEmptyPaths();
-        return t;
     }
 
-    private static int[] simplifyIndexes(int[] indexes) {
+    public static int[] simplifyIndexes(int[] indexes) {
         ArrayList<Integer> result = new ArrayList<>();
         int startIndex = indexes[0];
         result.add(startIndex);
-        for(int i=1; i<indexes.length; i++) {
-            if (indexes[i] != startIndex + 1) {
-                result.add(startIndex);
-                if (startIndex < indexes.length - 1) {
+        for(int i=0; i<indexes.length-1; i++) {
+            if (indexes[i+1] != startIndex + 1) {
+                if(!result.contains(indexes[i])) {
                     result.add(indexes[i]);
                 }
-                startIndex = indexes[i];
+                result.add(indexes[i+1]);
+                startIndex = indexes[i+1];
             } else {
                 startIndex++;
             }
+        }
+        if(!result.contains(indexes[indexes.length-1])) {
+            result.add(indexes[indexes.length-1]);
         }
         return intArrayListToPrimitive(result);
     }
@@ -201,11 +199,11 @@ public class TransferPointBuilder {
                 result.add(result.remove(index).combineDuplicates(t));
             }
         }
-        return result.toArray(new TransferPoint[result.size()]);
+        return result.toArray(new TransferPoint[0]);
     }
 
     public static int getIndexInPoints(ArrayList<TransferPoint> points, TransferPoint loc) {
-        TransferPoint[] result = points.toArray(new TransferPoint[points.size()]);
+        TransferPoint[] result = points.toArray(new TransferPoint[0]);
         for(int i=0; i<result.length; i++) {
             if(result[i].equals(loc)) {
                 return i;
