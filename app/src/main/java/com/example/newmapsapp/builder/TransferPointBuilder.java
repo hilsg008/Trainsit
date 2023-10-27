@@ -148,20 +148,23 @@ public class TransferPointBuilder {
         return t;
     }
 
-    private static int[] simplifyIndexes(int[] indexes) {
+    public static int[] simplifyIndexes(int[] indexes) {
         ArrayList<Integer> result = new ArrayList<>();
         int startIndex = indexes[0];
         result.add(startIndex);
-        for(int i=1; i<indexes.length; i++) {
-            if (indexes[i] != startIndex + 1) {
-                result.add(startIndex);
-                if (startIndex < indexes.length - 1) {
+        for(int i=0; i<indexes.length-1; i++) {
+            if (indexes[i+1] != startIndex + 1) {
+                if(!result.contains(indexes[i])) {
                     result.add(indexes[i]);
                 }
-                startIndex = indexes[i];
+                result.add(indexes[i+1]);
+                startIndex = indexes[i+1];
             } else {
                 startIndex++;
             }
+        }
+        if(!result.contains(indexes[indexes.length-1])) {
+            result.add(indexes[indexes.length-1]);
         }
         return intArrayListToPrimitive(result);
     }

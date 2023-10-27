@@ -130,6 +130,16 @@ public class ExampleUnitTest {
         }
     }
 
+    @Test
+    public void correctlySimplifyIndexes() {
+        int[] indexes = new int[]{1,2,4,5,7,8};
+        Assert.assertTrue(Arrays.equals(TransferPointBuilder.simplifyIndexes(indexes), indexes));
+        indexes = new int[]{1,2,3,5,7,8,9,10};
+        Assert.assertTrue(Arrays.equals(TransferPointBuilder.simplifyIndexes(indexes), new int[]{1,3,5,7,10}));
+        indexes = new int[]{1,3,5,6,7,9,10,11,13};
+        Assert.assertTrue(Arrays.equals(TransferPointBuilder.simplifyIndexes(indexes), new int[]{1,3,5,7,9,11,13}));
+    }
+
     static Location[] pointsToLocs(TransferPoint[] t) {
         Location[] result = new Location[t.length];
         for(int i=0; i<result.length; i++) {
