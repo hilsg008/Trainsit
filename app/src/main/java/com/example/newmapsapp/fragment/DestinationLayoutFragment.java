@@ -38,9 +38,7 @@ public class DestinationLayoutFragment extends Fragment {
                 .add(R.id.map_container, fragment)
                 .commit();
         binding = DestinationLayoutBinding.inflate(inflater, container, false);
-        builder = new ViewModelProvider(requireActivity()).get(PathBuilderViewModel.class).getBuilder();
-        start = new ViewModelProvider(requireActivity()).get(StartLocationViewModel.class).getLocation();
-        end = new ViewModelProvider(requireActivity()).get(EndLocationViewModel.class).getLocation();
+        createViewModels();
         ListView listView = binding.bottomList;
         BottomListAble[] b = new BottomListAble[]{};
         adapter = new BottomListAbleAdapter(inflater.getContext(), b);
@@ -57,5 +55,11 @@ public class DestinationLayoutFragment extends Fragment {
         }
         adapter.addItemToTop(end);
         adapter.addItemToTop(start);
+    }
+
+    private void createViewModels() {
+        builder = new ViewModelProvider(requireActivity()).get(PathBuilderViewModel.class).getBuilder();
+        start = new ViewModelProvider(requireActivity()).get(StartLocationViewModel.class).getLocation();
+        end = new ViewModelProvider(requireActivity()).get(EndLocationViewModel.class).getLocation();
     }
 }

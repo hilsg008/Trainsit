@@ -55,7 +55,6 @@ public class Route extends BottomListAble {
         }));
         LinearLayoutManager l = new LinearLayoutManager(layoutInflater.getContext(),LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(l);
-        v.setOnClickListener(this);
         return v;
     }
 
@@ -80,14 +79,13 @@ public class Route extends BottomListAble {
                 return loc;
             }
         }
-        return new Location(0,0);
+        return null;
     }
 
     private int getClosestCost(Location l) {
         int result = Integer.MAX_VALUE;
         for(Location loc: stops) {
-            int cost = loc.getCost(l);
-            result = Math.min(cost,result);
+            result = Math.min(loc.getCost(l),result);
         }
         return result;
     }
@@ -109,14 +107,11 @@ public class Route extends BottomListAble {
     }
 
     public Location getStartOfRoute() {
-        if(stops.length > 0) {
-            return stops[0];
-        }
-        return new Location(-1,-1);
+        return stops.length > 0 ? stops[0] : null;
     }
 
     public Location getEndOfRoute() {
-        return stops[stops.length-1];
+        return stops.length > 0 ? stops[stops.length-1] : null;
     }
 
     public String toString() {
@@ -130,13 +125,6 @@ public class Route extends BottomListAble {
 
     public boolean equals(Route r) {
         Location[] stops2 = r.getStops();
-        if(stopsEqual(stops2)) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean stopsEqual(Location[] stops2) {
         if(stops2.length != stops.length) {
             return false;
         }

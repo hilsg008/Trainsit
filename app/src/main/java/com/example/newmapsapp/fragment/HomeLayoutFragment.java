@@ -29,7 +29,11 @@ public class HomeLayoutFragment extends Fragment {
                 .commit();
         binding = HomeLayoutBinding.inflate(inflater, container, false);
         ListView listView = binding.bottomList;
-        BottomListAble[] b = new BottomListAble[]{new BottomListAble(), ExampleClasses.getLocations()[15], ExampleClasses.getRoutes()[0], new Path(new Route[][]{ExampleClasses.getRoutes(), {ExampleClasses.getRoutes()[1], ExampleClasses.getRoutes()[2]}})};
+        BottomListAble[] b = new BottomListAble[]{
+                new BottomListAble(),
+                ExampleClasses.getLocations()[15],
+                ExampleClasses.getRoutes()[0],
+                new Path(new Route[][]{ExampleClasses.getRoutes(), {ExampleClasses.getRoutes()[1], ExampleClasses.getRoutes()[2]}})};
         listView.setAdapter(new BottomListAbleAdapter(inflater.getContext(), b));
         return binding.getRoot();
     }
