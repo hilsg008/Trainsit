@@ -95,10 +95,7 @@ public class PathBuilder {
     public int getNearestPoint(Location l) {
         int lowestCost = Integer.MAX_VALUE;
         for(TransferPoint t: transferPoints) {
-            int cost = t.getCost(l);
-            if(lowestCost > cost) {
-                lowestCost = cost;
-            }
+            lowestCost = Math.min(t.getCost(l), lowestCost);
         }
         for(int i=0;i<transferPoints.length; i++) {
             if(transferPoints[i].getCost(l) == lowestCost) {
@@ -131,11 +128,11 @@ public class PathBuilder {
      * @param costs cost to each frontier point. -1 if not searched. -2 if searched.
      * @return index in costs
      */
-    public int getNextPoint(int[] costs) throws PathNotFoundException {
+    public int getNextPoint(int[] costs) {
         int val = Integer.MAX_VALUE;
         for(int cost:costs) {
-            if(cost > -1 && cost < val) {
-                val = cost;
+            if(cost > -1) {
+                val = Math.min(val, cost);
             }
         }
         for(int i=0; i<costs.length; i++) {

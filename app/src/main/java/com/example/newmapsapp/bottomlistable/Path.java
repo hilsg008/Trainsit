@@ -5,6 +5,7 @@ import android.content.ContextWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -52,12 +53,9 @@ public class Path extends BottomListAble {
     private Location[] getLocs() {
         ArrayList<Location> result = new ArrayList<>();
         for(Route[] r: routes) {
-            Location[] stops = r[0].getStops();
-            for(Location l:stops) {
-                result.add(l);
-            }
+            result.addAll(Arrays.asList(r[0].getStops()));
         }
-        return result.toArray(new Location[result.size()]);
+        return result.toArray(new Location[0]);
     }
 
     public LatLng[] getPoints() {
@@ -69,7 +67,7 @@ public class Path extends BottomListAble {
             }
             System.out.println(result);
         }
-        return result.toArray(new LatLng[result.size()]);
+        return result.toArray(new LatLng[0]);
     }
 
     public Route[][] getRoutes() {
@@ -112,6 +110,7 @@ public class Path extends BottomListAble {
         routes = newRoutes;
     }
 
+    @NonNull
     public String toString() {
         String s = "";
         for(Route[] r: routes) {
@@ -135,7 +134,6 @@ public class Path extends BottomListAble {
         }));
         LinearLayoutManager l = new LinearLayoutManager(layoutInflater.getContext(),LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(l);
-        v.setOnClickListener(this);
         return v;
     }
 
