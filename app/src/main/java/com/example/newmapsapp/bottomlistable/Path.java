@@ -105,7 +105,6 @@ public class Path extends BottomListAble {
         for(int i=0; i<addedRoutes.length; i++) {
             newRoutes[routes.length+i] = addedRoutes[i];
         }
-        costToEnd += p.getCost();
         return new Path(newRoutes);
     }
 
