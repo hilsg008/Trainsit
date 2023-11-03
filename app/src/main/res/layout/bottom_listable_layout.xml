@@ -6,20 +6,12 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:minHeight="40dp"
-        android:id="@+id/method"
-        android:layout_weight="1"
-        android:background="@color/material_dynamic_neutral60"
-        android:textColor="@color/white"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:minHeight="40dp"
-        android:id="@+id/time"
+        android:id="@+id/listabletext"
         android:layout_weight="3"
-        android:background="@color/material_dynamic_neutral50"
-        android:textColor="@color/white"/>
+        android:textSize="15pt"
+        android:background="@color/blue_max"
+        android:textColor="@color/yellow_max"/>
 </LinearLayout>
