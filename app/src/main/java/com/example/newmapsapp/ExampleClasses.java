@@ -1,6 +1,13 @@
 package com.example.newmapsapp;
 
+import android.view.View;
+
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 import com.example.newmapsapp.bottomlistable.*;
+import com.example.newmapsapp.viewmodel.RouteViewModel;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -14,6 +21,28 @@ public class ExampleClasses {
 
     public static int convertToColorInt(int a, int r, int g, int b) {
         return (a & 0xff) << 24 | (r & 0xff) << 16 | (g & 0xff) << 8 | (b & 0xff);
+    }
+
+    public static View.OnClickListener getSearchListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavController navController = Navigation.findNavController(view);
+                navController.navigate(R.id.go_to_searchLayoutFragmentNav);
+            }
+        };
+    }
+
+    public static View.OnFocusChangeListener getFocusListener() {
+        return new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if(hasFocus) {
+                    NavController navController = Navigation.findNavController(view);
+                    navController.navigate(R.id.go_to_searchLayoutFragmentNav);
+                }
+            }
+        };
     }
 
     public static Location[] getLocations() {
