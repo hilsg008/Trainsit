@@ -22,14 +22,15 @@ public class SearchLayoutFragment extends Fragment {
     private TopListFragment topList;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = SearchLayoutBinding.inflate(inflater, container, false);
         map = new MapsFragment();
         topList = new TopListFragment();
+        topList.isSearchFragment(true);
         getChildFragmentManager()
                 .beginTransaction()
                 .add(R.id.map_container, map)
                 .add(R.id.top_list, topList)
                 .commit();
-        binding = SearchLayoutBinding.inflate(inflater, container, false);
         ListView listView = binding.bottomList;
         BottomListAble[] b = new BottomListAble[]{};
         listView.setAdapter(new BottomListAbleAdapter(inflater.getContext(), b));
