@@ -58,6 +58,14 @@ public class TopListFragment extends Fragment {
             binding.endLoc.setOnFocusChangeListener(getFocusListener(false));
             binding.startLoc.setOnClickListener(getSearchListener(true));
             binding.startLoc.setOnFocusChangeListener(getFocusListener(true));
+        } else {
+            if(startLocSelected) {
+                binding.endLoc.setOnClickListener(getSearchListener(false));
+                binding.endLoc.setOnFocusChangeListener(getFocusListener(false));
+            } else {
+                binding.startLoc.setOnClickListener(getSearchListener(true));
+                binding.startLoc.setOnFocusChangeListener(getFocusListener(true));
+            }
         }
     }
 

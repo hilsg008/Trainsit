@@ -64,5 +64,8 @@
         <action
             android:id="@+id/go_to_routeLayoutFragmentNav"
             app:destination="@id/routeLayoutFragmentNav" />
+        <action
+            android:id="@+id/go_to_searchLayoutFragmentNav"
+            app:destination="@id/searchLayoutFragmentNav" />
     </fragment>
 </navigation>
