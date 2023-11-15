@@ -23,28 +23,6 @@ public class ExampleClasses {
         return (a & 0xff) << 24 | (r & 0xff) << 16 | (g & 0xff) << 8 | (b & 0xff);
     }
 
-    public static View.OnClickListener getSearchListener() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavController navController = Navigation.findNavController(view);
-                navController.navigate(R.id.go_to_searchLayoutFragmentNav);
-            }
-        };
-    }
-
-    public static View.OnFocusChangeListener getFocusListener() {
-        return new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if(hasFocus) {
-                    NavController navController = Navigation.findNavController(view);
-                    navController.navigate(R.id.go_to_searchLayoutFragmentNav);
-                }
-            }
-        };
-    }
-
     public static Location[] getLocations() {
         Location[] locs = new Location[21];
         locs[0] = new Location(2.1f,17.8f);

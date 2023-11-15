@@ -9,11 +9,14 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.newmapsapp.R;
 import com.example.newmapsapp.adapter.BottomListAbleAdapter;
 import com.example.newmapsapp.bottomlistable.BottomListAble;
 import com.example.newmapsapp.databinding.SearchLayoutBinding;
+import com.example.newmapsapp.viewmodel.IsStartLocation;
+import com.example.newmapsapp.viewmodel.RouteViewModel;
 
 public class SearchLayoutFragment extends Fragment {
 
@@ -25,7 +28,7 @@ public class SearchLayoutFragment extends Fragment {
         binding = SearchLayoutBinding.inflate(inflater, container, false);
         map = new MapsFragment();
         topList = new TopListFragment();
-        topList.isSearchFragment(true);
+        topList.isSearchFragment(new ViewModelProvider(requireActivity()).get(IsStartLocation.class).getBool());
         getChildFragmentManager()
                 .beginTransaction()
                 .add(R.id.map_container, map)

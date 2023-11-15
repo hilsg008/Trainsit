@@ -12,10 +12,15 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.newmapsapp.ExampleClasses;
 import com.example.newmapsapp.R;
 import com.example.newmapsapp.databinding.TopListBinding;
+import com.example.newmapsapp.viewmodel.EndLocationViewModel;
+import com.example.newmapsapp.viewmodel.IsStartLocation;
 
 public class TopListFragment extends Fragment {
     TopListBinding binding;
@@ -49,10 +54,38 @@ public class TopListFragment extends Fragment {
 
     private void setListeners() {
         if(!isSearchFragment) {
-            binding.endLoc.setOnClickListener(ExampleClasses.getSearchListener());
-            binding.endLoc.setOnFocusChangeListener(ExampleClasses.getFocusListener());
-            binding.startLoc.setOnClickListener(ExampleClasses.getSearchListener());
-            binding.startLoc.setOnFocusChangeListener(ExampleClasses.getFocusListener());
+            binding.endLoc.setOnClickListener(getSearchListener(false));
+            binding.endLoc.setOnFocusChangeListener(getFocusListener(false));
+            binding.startLoc.setOnClickListener(getSearchListener(true));
+            binding.startLoc.setOnFocusChangeListener(getFocusListener(true));
         }
+    }
+
+    private View.OnClickListener getSearchListener(boolean isStartLoc) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(getActivity() != null) {
+                    new ViewModelProvider(getActivity()).get(IsStartLocation.class).setBool(isStartLoc);
+                }
+                NavController navController = Navigation.findNavController(view);
+                navController.navigate(R.id.go_to_searchLayoutFragmentNav);
+            }
+        };
+    }
+
+    private View.OnFocusChangeListener getFocusListener(boolean isStartLoc) {
+        return new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if(hasFocus) {
+                    if(getActivity() != null) {
+                        new ViewModelProvider(getActivity()).get(IsStartLocation.class).setBool(isStartLoc);
+                    }
+                    NavController navController = Navigation.findNavController(view);
+                    navController.navigate(R.id.go_to_searchLayoutFragmentNav);
+                }
+            }
+        };
     }
 }
