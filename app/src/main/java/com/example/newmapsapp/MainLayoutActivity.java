@@ -11,6 +11,7 @@ import com.example.newmapsapp.builder.PathBuilder;
 import com.example.newmapsapp.builder.TransferPointBuilder;
 import com.example.newmapsapp.databinding.MainLayoutBinding;
 import com.example.newmapsapp.viewmodel.EndLocationViewModel;
+import com.example.newmapsapp.viewmodel.IsStartLocation;
 import com.example.newmapsapp.viewmodel.LocationViewModel;
 import com.example.newmapsapp.viewmodel.PathBuilderViewModel;
 import com.example.newmapsapp.viewmodel.RouteViewModel;
@@ -23,6 +24,7 @@ public class MainLayoutActivity extends AppCompatActivity {
     private StartLocationViewModel startViewModel;
     private EndLocationViewModel endViewModel;
     private RouteViewModel routeViewModel;
+    private IsStartLocation isStartLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,8 @@ public class MainLayoutActivity extends AppCompatActivity {
     }
 
     private void createViewModels() {
+        isStartLocation = new ViewModelProvider(this).get(IsStartLocation.class);
+        isStartLocation.setBool(false);
         routeViewModel = new ViewModelProvider(this).get(RouteViewModel.class);
         routeViewModel.setRoute(new Route(new Location[0]));
         builderViewModel = new ViewModelProvider(this).get(PathBuilderViewModel.class);

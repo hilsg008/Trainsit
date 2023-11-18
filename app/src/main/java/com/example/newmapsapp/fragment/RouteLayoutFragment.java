@@ -36,6 +36,7 @@ public class RouteLayoutFragment extends Fragment {
         getChildFragmentManager()
                 .beginTransaction()
                 .add(R.id.map_container, map)
+                .add(R.id.top_list, new TopListFragment())
                 .commit();
         binding = RouteLayoutBinding.inflate(inflater, container, false);
         TextView routeName = binding.routeName;

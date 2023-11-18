@@ -20,7 +20,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.newmapsapp.bottomlistable.Location;
 import com.example.newmapsapp.bottomlistable.Route;
+import com.example.newmapsapp.viewmodel.EndLocationViewModel;
 import com.example.newmapsapp.viewmodel.RouteViewModel;
+import com.example.newmapsapp.viewmodel.StartLocationViewModel;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -30,6 +32,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -81,22 +84,19 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
-        drawPoints();
         drawRoute();
+        drawLocations();
     }
 
     public void setRoute(Route r) {
         route = r;
     }
 
-    private void drawPoints() {
-        Location[] locs = getCorrectSortedLocations();
-        for (Location l : locs) {
-            MarkerOptions m = new MarkerOptions();
-            m.icon(BitmapDescriptorFactory.defaultMarker((float) (Math.random() * 360)));
-            m.position(l.getLatLng());
-            mMap.addMarker(m);
-        }
+    private void drawLocations() {
+        mMap.addMarker(new MarkerOptions().position(
+                new ViewModelProvider(requireActivity()).get(StartLocationViewModel.class).getLocation().getLatLng()));
+        mMap.addMarker(new MarkerOptions().position(
+                new ViewModelProvider(requireActivity()).get(EndLocationViewModel.class).getLocation().getLatLng()));
     }
 
     /**

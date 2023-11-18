@@ -36,6 +36,7 @@ public class DestinationLayoutFragment extends Fragment {
         getChildFragmentManager()
                 .beginTransaction()
                 .add(R.id.map_container, fragment)
+                .add(R.id.top_list, new TopListFragment())
                 .commit();
         binding = DestinationLayoutBinding.inflate(inflater, container, false);
         createViewModels();
