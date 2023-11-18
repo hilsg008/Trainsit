@@ -3,6 +3,7 @@ package com.example.newmapsapp.bottomlistable;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.location.Address;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -29,6 +30,10 @@ public class Location extends BottomListAble {
     public Location(LatLng l) {
         latLng = l;
         r = Math.sqrt(Math.pow(l.longitude,2)+Math.pow(l.latitude,2));
+    }
+
+    public Location(Address a) {
+        this(a.getLongitude(), a.getLatitude());
     }
 
     public boolean equals(Location l) {
