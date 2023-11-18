@@ -17,18 +17,22 @@ import com.example.newmapsapp.bottomlistable.BottomListAble;
 import com.example.newmapsapp.databinding.SearchLayoutBinding;
 import com.example.newmapsapp.viewmodel.IsStartLocation;
 import com.example.newmapsapp.viewmodel.RouteViewModel;
+import com.example.newmapsapp.viewmodel.TopListStringViewModel;
 
 public class SearchLayoutFragment extends Fragment {
 
     private SearchLayoutBinding binding;
     private MapsFragment map;
     private TopListFragment topList;
+    private TopListStringViewModel topListString;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = SearchLayoutBinding.inflate(inflater, container, false);
         map = new MapsFragment();
         topList = new TopListFragment();
         topList.isSearchFragment(new ViewModelProvider(requireActivity()).get(IsStartLocation.class).getBool());
+        topListString = new ViewModelProvider(requireActivity()).get(TopListStringViewModel.class);
+        topListString.getString().observe(getViewLifecycleOwner(), s -> binding.testtext.setText(s));
         getChildFragmentManager()
                 .beginTransaction()
                 .add(R.id.map_container, map)

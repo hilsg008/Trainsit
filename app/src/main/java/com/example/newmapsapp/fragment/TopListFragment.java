@@ -2,6 +2,8 @@ package com.example.newmapsapp.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,13 +23,17 @@ import com.example.newmapsapp.R;
 import com.example.newmapsapp.databinding.TopListBinding;
 import com.example.newmapsapp.viewmodel.EndLocationViewModel;
 import com.example.newmapsapp.viewmodel.IsStartLocation;
+import com.example.newmapsapp.viewmodel.TopListStringViewModel;
 
 public class TopListFragment extends Fragment {
     TopListBinding binding;
     private boolean isSearchFragment = false;
     private boolean startLocSelected = false;
+    TopListStringViewModel topListString;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        topListString = new ViewModelProvider(requireActivity()).get(TopListStringViewModel.class);
+        topListString.setString("lolol");
         Log.d("ThisIsATag", "onCreate");
         binding = TopListBinding.inflate(inflater, container, false);
         setListeners();
@@ -62,11 +68,28 @@ public class TopListFragment extends Fragment {
             if(startLocSelected) {
                 binding.endLoc.setOnClickListener(getSearchListener(false));
                 binding.endLoc.setOnFocusChangeListener(getFocusListener(false));
+                binding.startLoc.addTextChangedListener(onTextEdit());
             } else {
                 binding.startLoc.setOnClickListener(getSearchListener(true));
                 binding.startLoc.setOnFocusChangeListener(getFocusListener(true));
+                binding.endLoc.addTextChangedListener(onTextEdit());
             }
         }
+    }
+
+    private TextWatcher onTextEdit() {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                topListString.setString(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        };
     }
 
     private View.OnClickListener getSearchListener(boolean isStartLoc) {
