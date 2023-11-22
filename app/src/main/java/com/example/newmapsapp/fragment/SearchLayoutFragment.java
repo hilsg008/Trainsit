@@ -1,8 +1,8 @@
 package com.example.newmapsapp.fragment;
 
-import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +19,17 @@ import com.example.newmapsapp.bottomlistable.BottomListAble;
 import com.example.newmapsapp.bottomlistable.Location;
 import com.example.newmapsapp.databinding.SearchLayoutBinding;
 import com.example.newmapsapp.viewmodel.IsStartLocation;
-import com.example.newmapsapp.viewmodel.RouteViewModel;
 import com.example.newmapsapp.viewmodel.TopListStringViewModel;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.AutocompletePrediction;
+import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
+import com.google.android.libraries.places.api.net.PlacesClient;
 
-import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 public class SearchLayoutFragment extends Fragment {
 
@@ -31,7 +37,9 @@ public class SearchLayoutFragment extends Fragment {
     private MapsFragment map;
     private TopListFragment topList;
     private TopListStringViewModel topListString;
-    private Geocoder decoder;
+    private PlacesClient client;
+    private AutocompleteSessionToken token;
+    private Geocoder coder;
     BottomListAbleAdapter adapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,17 +50,32 @@ public class SearchLayoutFragment extends Fragment {
         BottomListAble[] b = new BottomListAble[]{};
         adapter = new BottomListAbleAdapter(inflater.getContext(), b);
         listView.setAdapter(adapter);
-        decoder = new Geocoder(getContext());
+        Places.initialize(getContext(), getString(R.string.google_key));
+        client = Places.createClient(getContext());
+
+        token = AutocompleteSessionToken.newInstance();
+        coder = new Geocoder(getContext(), Locale.US);
 
         topList = new TopListFragment();
         topList.isSearchFragment(new ViewModelProvider(requireActivity()).get(IsStartLocation.class).getBool());
         topListString = new ViewModelProvider(requireActivity()).get(TopListStringViewModel.class);
         topListString.getString().observe(getViewLifecycleOwner(), s -> {
-            try {
-                adapter.setItems(addressesToLocArr(decoder.getFromLocationName(s,3)));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
+                        .setOrigin(Location.MINNEAPOLIS.getLatLng())
+                        .setCountries("US")
+                        .setSessionToken(token)
+                        .setQuery(s)
+                        .build();
+                client.findAutocompletePredictions(request).addOnSuccessListener((response) -> {
+                    adapter.setItems(addressesToLocArr(response.getAutocompletePredictions()));
+                }).addOnFailureListener((exception) -> {
+                    if (exception instanceof ApiException) {
+                        ApiException apiException = (ApiException) exception;
+                        Status status = apiException.getStatus();
+                        Log.e("ThisIsATag", "Place not found: " + status.getStatusMessage() + " " + status.getStatusCode());
+                    }
+                });
+            ;
         });
 
         getChildFragmentManager()
@@ -64,10 +87,16 @@ public class SearchLayoutFragment extends Fragment {
         return binding.getRoot();
     }
 
-    private static Location[] addressesToLocArr(List<Address> addresses) {
+    private Location[] addressesToLocArr(List<AutocompletePrediction> addresses) {
+        Log.d("ThisIsATag", Integer.toString(addresses.size()));
         Location[] l = new Location[addresses.size()];
         for(int i=0; i<l.length; i++) {
-            l[i] = new Location(addresses.get(i));
+           // try {
+                Log.d("ThisIsATag", addresses.get(i).toString());
+                l[i] = Location.ZERO;
+            //} catch (IOException e) {
+               // e.printStackTrace();
+            //}
         }
         return l;
     }
