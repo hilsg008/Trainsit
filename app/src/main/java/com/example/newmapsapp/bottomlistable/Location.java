@@ -21,6 +21,7 @@ public class Location extends BottomListAble {
     public static Location ZERO = new Location(0,0);
     public static Location MINNEAPOLIS = new Location(-93.26,44.97);
 
+    private String address = "";
     private LatLng latLng;
     public double r;
     public Location(double PosX, double PosY) {
@@ -71,6 +72,14 @@ public class Location extends BottomListAble {
 
     public int getCost(LatLng l) {
         return(int)(100*Math.sqrt(Math.pow(l.longitude-getX(),2) + Math.pow(l.latitude-getY(),2)));
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getAddress() {
+        return address;
     }
 
     @Override

@@ -87,7 +87,6 @@ public class SearchLayoutFragment extends Fragment {
     private LocationName[] addressesToLocArr(List<AutocompletePrediction> addresses) {
         LocationName[] l = new LocationName[addresses.size()];
         for(int i=0; i<l.length; i++) {
-            Log.d("ThisIsATag", addresses.get(i).toString());
             l[i] = new LocationName(addresses.get(i).getPrimaryText(null).toString(), addresses.get(i).getPlaceId());
         }
         return l;
