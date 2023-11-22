@@ -18,7 +18,9 @@ import com.example.newmapsapp.bottomlistable.BottomListAble;
 import com.example.newmapsapp.bottomlistable.Location;
 import com.example.newmapsapp.bottomlistable.LocationName;
 import com.example.newmapsapp.databinding.SearchLayoutBinding;
+import com.example.newmapsapp.viewmodel.EndLocationViewModel;
 import com.example.newmapsapp.viewmodel.IsStartLocation;
+import com.example.newmapsapp.viewmodel.StartLocationViewModel;
 import com.example.newmapsapp.viewmodel.TopListStringViewModel;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Status;
@@ -43,6 +45,10 @@ public class SearchLayoutFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = SearchLayoutBinding.inflate(inflater, container, false);
         map = new MapsFragment();
+        map.setStartAndEnd(
+                new ViewModelProvider(requireActivity()).get(StartLocationViewModel.class).getLocation().getLatLng(),
+                new ViewModelProvider(requireActivity()).get(EndLocationViewModel.class).getLocation().getLatLng()
+        );
 
         ListView listView = binding.bottomList;
         BottomListAble[] b = new BottomListAble[]{};
