@@ -14,6 +14,8 @@ import androidx.navigation.Navigation;
 
 import com.example.newmapsapp.R;
 import com.example.newmapsapp.viewmodel.EndLocationViewModel;
+import com.example.newmapsapp.viewmodel.IsStartLocation;
+import com.example.newmapsapp.viewmodel.StartLocationViewModel;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -42,7 +44,12 @@ public class LocationName extends BottomListAble {
         NavController navController = Navigation.findNavController(view);
         try {
             Location location = new Location(new Geocoder(view.getContext(), Locale.US).getFromLocationName(locName, 1).get(0));
-            new ViewModelProvider(getActivity(view.getContext())).get(EndLocationViewModel.class).setLocation(location);
+            boolean isSearchingForStartLoc = new ViewModelProvider(getActivity(view.getContext())).get(IsStartLocation.class).getBool();
+            if(isSearchingForStartLoc) {
+                new ViewModelProvider(getActivity(view.getContext())).get(StartLocationViewModel.class).setLocation(location);
+            } else {
+                new ViewModelProvider(getActivity(view.getContext())).get(EndLocationViewModel.class).setLocation(location);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
