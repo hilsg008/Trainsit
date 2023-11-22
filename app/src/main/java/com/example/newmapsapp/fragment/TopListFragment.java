@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +17,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.example.newmapsapp.ExampleClasses;
 import com.example.newmapsapp.R;
+import com.example.newmapsapp.bottomlistable.Location;
 import com.example.newmapsapp.databinding.TopListBinding;
 import com.example.newmapsapp.viewmodel.EndLocationViewModel;
 import com.example.newmapsapp.viewmodel.IsStartLocation;
+import com.example.newmapsapp.viewmodel.StartLocationViewModel;
 import com.example.newmapsapp.viewmodel.TopListStringViewModel;
 
 public class TopListFragment extends Fragment {
@@ -32,17 +32,19 @@ public class TopListFragment extends Fragment {
     TopListStringViewModel topListString;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Location startLoc = new ViewModelProvider(requireActivity()).get(StartLocationViewModel.class).getLocation();
+        Location endLoc = new ViewModelProvider(requireActivity()).get(EndLocationViewModel.class).getLocation();
         topListString = new ViewModelProvider(requireActivity()).get(TopListStringViewModel.class);
-        topListString.setString("lolol");
-        Log.d("ThisIsATag", "onCreate");
+        topListString.setString("");
         binding = TopListBinding.inflate(inflater, container, false);
+        binding.startLoc.setText(startLoc.getAddress());
+        binding.endLoc.setText(endLoc.getAddress());
         setListeners();
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Log.d("ThisIsATag", "viewCreated");
         if(isSearchFragment) {
             EditText v = startLocSelected ? view.findViewById(R.id.startLoc) : view.findViewById(R.id.endLoc);
             if(v.requestFocus()) {
@@ -53,7 +55,6 @@ public class TopListFragment extends Fragment {
     }
 
     public void isSearchFragment(boolean isStartLoc) {
-        Log.d("ThisIsATag", "IsSearch");
         isSearchFragment = true;
         startLocSelected = isStartLoc;
     }

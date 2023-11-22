@@ -44,6 +44,7 @@ public class LocationName extends BottomListAble {
         NavController navController = Navigation.findNavController(view);
         try {
             Location location = new Location(new Geocoder(view.getContext(), Locale.US).getFromLocationName(locName, 1).get(0));
+            location.setAddress(locName);
             boolean isSearchingForStartLoc = new ViewModelProvider(getActivity(view.getContext())).get(IsStartLocation.class).getBool();
             if(isSearchingForStartLoc) {
                 new ViewModelProvider(getActivity(view.getContext())).get(StartLocationViewModel.class).setLocation(location);
