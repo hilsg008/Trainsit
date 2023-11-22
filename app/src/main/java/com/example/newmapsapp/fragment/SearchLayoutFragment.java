@@ -1,6 +1,5 @@
 package com.example.newmapsapp.fragment;
 
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +16,7 @@ import com.example.newmapsapp.R;
 import com.example.newmapsapp.adapter.BottomListAbleAdapter;
 import com.example.newmapsapp.bottomlistable.BottomListAble;
 import com.example.newmapsapp.bottomlistable.Location;
+import com.example.newmapsapp.bottomlistable.LocationName;
 import com.example.newmapsapp.databinding.SearchLayoutBinding;
 import com.example.newmapsapp.viewmodel.IsStartLocation;
 import com.example.newmapsapp.viewmodel.TopListStringViewModel;
@@ -29,7 +29,6 @@ import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRe
 import com.google.android.libraries.places.api.net.PlacesClient;
 
 import java.util.List;
-import java.util.Locale;
 
 public class SearchLayoutFragment extends Fragment {
 
@@ -39,7 +38,6 @@ public class SearchLayoutFragment extends Fragment {
     private TopListStringViewModel topListString;
     private PlacesClient client;
     private AutocompleteSessionToken token;
-    private Geocoder coder;
     BottomListAbleAdapter adapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,7 +52,6 @@ public class SearchLayoutFragment extends Fragment {
         client = Places.createClient(getContext());
 
         token = AutocompleteSessionToken.newInstance();
-        coder = new Geocoder(getContext(), Locale.US);
 
         topList = new TopListFragment();
         topList.isSearchFragment(new ViewModelProvider(requireActivity()).get(IsStartLocation.class).getBool());
@@ -87,16 +84,11 @@ public class SearchLayoutFragment extends Fragment {
         return binding.getRoot();
     }
 
-    private Location[] addressesToLocArr(List<AutocompletePrediction> addresses) {
-        Log.d("ThisIsATag", Integer.toString(addresses.size()));
-        Location[] l = new Location[addresses.size()];
+    private LocationName[] addressesToLocArr(List<AutocompletePrediction> addresses) {
+        LocationName[] l = new LocationName[addresses.size()];
         for(int i=0; i<l.length; i++) {
-           // try {
-                Log.d("ThisIsATag", addresses.get(i).toString());
-                l[i] = Location.ZERO;
-            //} catch (IOException e) {
-               // e.printStackTrace();
-            //}
+            Log.d("ThisIsATag", addresses.get(i).toString());
+            l[i] = new LocationName(addresses.get(i).getPrimaryText(null).toString(), addresses.get(i).getPlaceId());
         }
         return l;
     }
