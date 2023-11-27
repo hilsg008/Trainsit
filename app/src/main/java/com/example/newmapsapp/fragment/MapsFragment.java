@@ -1,5 +1,7 @@
 package com.example.newmapsapp.fragment;
 
+import android.app.Activity;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,9 +9,12 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.newmapsapp.bottomlistable.Location;
 import com.example.newmapsapp.bottomlistable.Route;
+import com.example.newmapsapp.viewmodel.EndLocationViewModel;
+import com.example.newmapsapp.viewmodel.StartLocationViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -23,7 +28,6 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
 
     private GoogleMap mMap;
     private Route route;
-    private LatLng start, end;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -51,16 +55,17 @@ public class MapsFragment extends SupportMapFragment implements OnMapReadyCallba
         route = r;
     }
 
-    public void setStartAndEnd(LatLng startLoc, LatLng endLoc) {
-         start = startLoc;
-         end = endLoc;
-    }
-
     private void drawLocations() {
+        LatLng start = new ViewModelProvider(requireActivity()).get(StartLocationViewModel.class).getLocation().getLatLng();
+        LatLng end = new ViewModelProvider(requireActivity()).get(EndLocationViewModel.class).getLocation().getLatLng();
         if(start != null && end != null) {
             mMap.addMarker(new MarkerOptions().position(start));
             mMap.addMarker(new MarkerOptions().position(end));
-            setCamera(new LatLng[]{start,end});
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            builder.include(start);
+            builder.include(end);
+            Rect screenBounds = ((Activity) getContext()).getWindowManager().getMaximumWindowMetrics().getBounds();
+            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), screenBounds.width(), screenBounds.height(), 100));
         }
     }
 
