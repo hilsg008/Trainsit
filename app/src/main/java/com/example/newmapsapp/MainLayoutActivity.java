@@ -12,7 +12,6 @@ import com.example.newmapsapp.builder.TransferPointBuilder;
 import com.example.newmapsapp.databinding.MainLayoutBinding;
 import com.example.newmapsapp.viewmodel.EndLocationViewModel;
 import com.example.newmapsapp.viewmodel.IsStartLocation;
-import com.example.newmapsapp.viewmodel.LocationViewModel;
 import com.example.newmapsapp.viewmodel.PathBuilderViewModel;
 import com.example.newmapsapp.viewmodel.RouteViewModel;
 import com.example.newmapsapp.viewmodel.StartLocationViewModel;
@@ -42,8 +41,8 @@ public class MainLayoutActivity extends AppCompatActivity {
         builderViewModel = new ViewModelProvider(this).get(PathBuilderViewModel.class);
         builderViewModel.setBuilder(new PathBuilder(TransferPointBuilder.getTransferPoints(ExampleClasses.getRoutes())));
         startViewModel = new ViewModelProvider(this).get(StartLocationViewModel.class);
-        startViewModel.setLocation(ExampleClasses.getLocations()[11]);
+        startViewModel.setLocation(Location.MINNEAPOLIS);
         endViewModel = new ViewModelProvider(this).get(EndLocationViewModel.class);
-        endViewModel.setLocation(Location.ZERO);
+        endViewModel.setLocation(Location.SAINT_PAUL);
     }
 }

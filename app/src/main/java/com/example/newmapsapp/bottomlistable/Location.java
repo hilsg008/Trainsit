@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.LatLng;
 public class Location extends BottomListAble {
     public static Location ZERO = new Location(0,0);
     public static Location MINNEAPOLIS = new Location(-93.26,44.97);
+    public static Location SAINT_PAUL = new Location(-93.09, 44.95);
 
     private String address = "";
     private LatLng latLng;
