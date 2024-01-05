@@ -85,7 +85,7 @@ public class TopListFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                topListString.setString(charSequence.toString());
+                topListString.setString(charSequence.toString().replaceAll("[^0-9a-zA-Z ]",""));
             }
 
             @Override

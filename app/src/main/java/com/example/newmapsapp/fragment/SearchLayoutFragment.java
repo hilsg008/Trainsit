@@ -72,7 +72,6 @@ public class SearchLayoutFragment extends Fragment {
                         Log.e("ThisIsATag", "Place not found: " + status.getStatusMessage() + " " + status.getStatusCode());
                     }
                 });
-            ;
         });
 
         getChildFragmentManager()
