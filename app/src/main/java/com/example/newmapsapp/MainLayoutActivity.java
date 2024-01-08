@@ -68,34 +68,28 @@ public class MainLayoutActivity extends AppCompatActivity {
 
     private UrlRequest.Callback getCallback() {
         return new UrlRequest.Callback() {
-            private static final String TAG = "MyUrlRequestCallback";
 
             @Override
             public void onRedirectReceived(UrlRequest request, UrlResponseInfo info, String newLocationUrl) {
-                Log.i(TAG, "onRedirectReceived method called.");
                 request.followRedirect();
             }
 
             @Override
             public void onResponseStarted(UrlRequest request, UrlResponseInfo info) {
-                Log.i(TAG, "onResponseStarted method called.");
                 int status = info.getHttpStatusCode();
                 if(status == 200) {
                     ByteBuffer b = ByteBuffer.allocateDirect(102400);
                     request.read(b);
                     String result = new String(b.array(), StandardCharsets.UTF_8).replaceAll("\0", "");
-                    Log.i(TAG, result);
-                    Log.i(TAG, ""+result.length());
                 } else if(status == 400) {
-                    Log.i(TAG, "Bad Request.");
+                    Log.d("ThisIsATag", "Bad Request.");
                 } else if(status == 500) {
-                    Log.i(TAG, "Server Error.");
+                    Log.d("ThisIsATag", "Server Error.");
                 }
             }
 
             @Override
             public void onReadCompleted(UrlRequest request, UrlResponseInfo info, ByteBuffer byteBuffer) {
-                Log.i(TAG, "onReadCompleted method called.");
                 // You should keep reading the request until there's no more data.
                 byteBuffer.clear();
                 request.read(byteBuffer);
@@ -103,17 +97,14 @@ public class MainLayoutActivity extends AppCompatActivity {
 
             @Override
             public void onSucceeded(UrlRequest request, UrlResponseInfo info) {
-                Log.i(TAG, "onSucceeded method called.");
             }
 
             @Override
             public void onFailed(UrlRequest request, UrlResponseInfo info, CronetException error) {
-                Log.i(TAG, "onFailed method called.");
             }
 
             @Override
             public void onCanceled(UrlRequest request, UrlResponseInfo info) {
-                Log.i(TAG, "onCanceled method called.");
             }
         };
     }

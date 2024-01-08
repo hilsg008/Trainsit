@@ -6,6 +6,7 @@ import com.example.newmapsapp.bottomlistable.Route;
 import com.example.newmapsapp.bottomlistable.TransferPoint;
 import com.example.newmapsapp.builder.PathBuilder;
 import com.example.newmapsapp.builder.TransferPointBuilder;
+import com.example.newmapsapp.exception.PathNotFoundException;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Assert;

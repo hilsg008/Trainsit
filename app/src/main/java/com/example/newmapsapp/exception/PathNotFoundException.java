@@ -1,4 +1,4 @@
-package com.example.newmapsapp;
+package com.example.newmapsapp.exception;
 
 import com.example.newmapsapp.bottomlistable.Location;
 
