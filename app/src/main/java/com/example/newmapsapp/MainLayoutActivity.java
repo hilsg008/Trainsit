@@ -22,6 +22,12 @@ import org.chromium.net.CronetException;
 import org.chromium.net.UrlRequest;
 import org.chromium.net.UrlResponseInfo;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Executor;
@@ -41,6 +47,7 @@ public class MainLayoutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         createViewModels();
+        testServerConnectionOnPhone();
         grabMTInformation();
         binding = MainLayoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -108,4 +115,115 @@ public class MainLayoutActivity extends AppCompatActivity {
             }
         };
     }
+
+    private void testServerConnectionOnPhone() {
+        SocketManager socketManager = new SocketManager();
+        socketManager.createSocket(new SocketManager.SocketListener() {
+            @Override
+            public void onSocketCreated(Socket socket) {
+                // Handle the created socket
+                if (socket != null) {
+                    Client reader = new ServerReader(socket);
+                    Client writer = new ServerWriter(socket);
+
+                    //Creates threads for connections
+                    Thread firstThread = new Thread(reader);
+                    Thread secondThread = new Thread(writer);
+
+                    //Starts threads
+                    firstThread.start();
+                    secondThread.start();
+                    try {
+                        firstThread.join();
+                        secondThread.join();
+                    }
+                    catch (InterruptedException e) {
+                        Log.d("ThisIsATag", "InterruptedException");
+                    }
+
+                } else {
+                    Log.d("ThisIsATag", "SocketCreationFailure");
+                }
+            }
+        });
+    }
+
+    public class Client implements Runnable {
+        InputStream input;
+        OutputStream output;
+        Socket socket;
+
+        public void run() {
+            try {
+                int inputInt;
+                while ((inputInt = input.read()) != -1) {
+                    output.write(inputInt);
+                }
+                output.flush();
+            } catch (IOException ioe) {
+                System.out.println("Threw IOE: ");
+                System.out.println(ioe);
+            }
+
+        }
+    }
+
+    public class ServerWriter extends Client {
+        public ServerWriter(Socket client) {
+            try {
+                socket = client;
+                input = new ByteArrayInputStream("ThisIsATestString".getBytes(StandardCharsets.UTF_8));
+                output = client.getOutputStream();
+            } catch (IOException ioe) {
+                System.out.println("Threw IOE: ");
+                System.out.println(ioe);
+            }
+
+        }
+
+        @Override
+        public void run() {
+            super.run();
+            try {
+                socket.shutdownOutput();
+            } catch (IOException ioe) {
+                System.out.println("Threw IOE: ");
+                System.out.println(ioe);
+            }
+        }
+    }
+
+    /*
+     * Grabbing the server's output uses
+     * InputStream as its input
+     * System.out as its output
+     */
+    public class ServerReader extends Client {
+        ByteArrayOutputStream o = new ByteArrayOutputStream(17);
+        public ServerReader(Socket client) {
+            try {
+                socket = client;
+                input = client.getInputStream();
+                output = o;
+            } catch (IOException ioe) {
+                System.out.println("Threw IOE: ");
+                System.out.println(ioe);
+            }
+
+        }
+
+        @Override
+        public void run() {
+            super.run();
+            try {
+                socket.close();
+                Log.d("ThisIsATag", new String(o.toByteArray(), StandardCharsets.UTF_8));
+            } catch (IOException ioe) {
+                System.out.println("Threw IOE: ");
+                System.out.println(ioe);
+            }
+        }
+    }
+
+
 }
