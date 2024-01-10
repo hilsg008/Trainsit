@@ -1,5 +1,7 @@
 package com.example.newmapsapp;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.Callable;
@@ -11,7 +13,7 @@ public class SocketManager {
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private final int portNumber = 6013;
-    private String server = "192.168.0.12";
+    private String server = "192.168.0.50";
 
     public void createSocket(final SocketListener listener) {
         Callable<Socket> socketCallable = new Callable<Socket>() {
@@ -32,7 +34,7 @@ public class SocketManager {
                     listener.onSocketCreated(socket);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.d("ThisIsATag", "SocketCreationFailed.");
             }
         });
     }

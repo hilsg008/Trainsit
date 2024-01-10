@@ -67,6 +67,13 @@ public class Location extends BottomListAble {
         return "x: " + latLng.longitude + " y: " + latLng.latitude;
     }
 
+    public Location(String s) {
+        double x = Double.parseDouble(s.substring(s.indexOf('x')+3,s.indexOf('y')-1));
+        double y = Double.parseDouble(s.substring(s.indexOf('y')+3));
+        latLng = new LatLng(y,x);
+        r = Math.sqrt(x*x+y*y);
+    }
+
     public int getCost(Location l) {
         return getCost(l.getLatLng());
     }

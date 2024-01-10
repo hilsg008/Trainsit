@@ -12,10 +12,13 @@ import com.google.android.gms.maps.model.LatLng;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -240,14 +243,46 @@ public class ExampleUnitTest {
     }
 
     @Test
+    public void locationConvertsInAndOutOfString() {
+        for(int i=0; i<100; i++) {
+            Location l = new Location(Math.random(), Math.random());
+            Location l2 = new Location(l.toString());
+            Assert.assertTrue(l.equals(l2));
+        }
+        Location l = Location.ZERO;
+        Location l2 = new Location(l.toString());
+        Assert.assertTrue(l.equals(l2));
+    }
+
+    @Test
+    public void routeConvertsInAndOutOfString() {
+        for(int i=0; i<100; i++) {
+            int rand = (int)(20*Math.random());
+            Location[] locs = new Location[rand];
+            for(int j=0; j<rand;j++) {
+                locs[j] = new Location(Math.random(), Math.random());
+            }
+            Route r = new Route(locs, ""+rand);
+            Route r2 = new Route(r.toString());
+            Assert.assertTrue(r.equalsWithName(r2));
+        }
+        Route r = new Route(new Location[0]);
+        Route r2 = new Route(r.toString());
+        Assert.assertTrue(r.equals(r2));
+        r = new Route(new Location[]{Location.ZERO});
+        r2 = new Route(r.toString());
+        Assert.assertTrue(r.equals(r2));
+    }
+
+    //USES PLAIN SERVER WHICH JUST SENDS BACK BYTES RECIEVED
+    @Test
     public void canConnectToLocalSever() {
+        String randomS = "asdfghgfdsasdfghjkkkkkjhgfdsa";
         final int portNumber = 6013;
-        String server = "127.0.0.1";
-        ;
         try {
             Socket socket = new Socket("localhost", portNumber);
-            Client reader = new ServerReader(socket);
-            Client writer = new ServerWriter(socket);
+            ServerReader reader = new ServerReader(socket);
+            Client writer = new ServerWriter(socket, randomS);
 
             //Creates threads for connections
             Thread firstThread = new Thread(reader);
@@ -258,6 +293,8 @@ public class ExampleUnitTest {
             secondThread.start();
             firstThread.join();
             secondThread.join();
+
+            Assert.assertEquals(reader.getResult(), randomS);
 
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -285,10 +322,10 @@ public class ExampleUnitTest {
     }
 
     public class ServerWriter extends Client {
-        public ServerWriter(Socket client) {
+        public ServerWriter(Socket client, String toBePassed) {
             try {
                 socket = client;
-                input = System.in;
+                input = new ByteArrayInputStream(toBePassed.getBytes(StandardCharsets.UTF_8));
                 output = client.getOutputStream();
             } catch (IOException ioe) {
                 System.out.println("Threw IOE: ");
@@ -315,16 +352,21 @@ public class ExampleUnitTest {
      * System.out as its output
      */
     public class ServerReader extends Client {
+        ByteArrayOutputStream o = new ByteArrayOutputStream(1000);
         public ServerReader(Socket client) {
             try {
                 socket = client;
                 input = client.getInputStream();
-                output = System.out;
+                output = o;
             } catch (IOException ioe) {
                 System.out.println("Threw IOE: ");
                 System.out.println(ioe);
             }
 
+        }
+
+        public String getResult() {
+            return new String(o.toByteArray(), StandardCharsets.UTF_8).replaceAll("\0", "");
         }
 
         @Override
