@@ -18,9 +18,6 @@ import com.example.newmapsapp.viewmodel.RouteViewModel;
 import com.example.newmapsapp.viewmodel.StartLocationViewModel;
 
 import org.chromium.net.CronetEngine;
-import org.chromium.net.CronetException;
-import org.chromium.net.UrlRequest;
-import org.chromium.net.UrlResponseInfo;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -28,10 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 public class MainLayoutActivity extends AppCompatActivity {
 
@@ -48,7 +42,6 @@ public class MainLayoutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         createViewModels();
         testServerConnectionOnPhone();
-        grabMTInformation();
         binding = MainLayoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
     }
@@ -64,56 +57,6 @@ public class MainLayoutActivity extends AppCompatActivity {
         startViewModel.setLocation(Location.MINNEAPOLIS);
         endViewModel = new ViewModelProvider(this).get(EndLocationViewModel.class);
         endViewModel.setLocation(Location.SAINT_PAUL);
-    }
-
-    private void grabMTInformation() {
-        engine = new CronetEngine.Builder(getApplicationContext()).build();
-        Executor executor = Executors.newSingleThreadExecutor();
-        UrlRequest request = engine.newUrlRequestBuilder("https://svc.metrotransit.org/nextrip/agencies", getCallback(), executor).build();
-        request.start();
-    }
-
-    private UrlRequest.Callback getCallback() {
-        return new UrlRequest.Callback() {
-
-            @Override
-            public void onRedirectReceived(UrlRequest request, UrlResponseInfo info, String newLocationUrl) {
-                request.followRedirect();
-            }
-
-            @Override
-            public void onResponseStarted(UrlRequest request, UrlResponseInfo info) {
-                int status = info.getHttpStatusCode();
-                if(status == 200) {
-                    ByteBuffer b = ByteBuffer.allocateDirect(102400);
-                    request.read(b);
-                    String result = new String(b.array(), StandardCharsets.UTF_8).replaceAll("\0", "");
-                } else if(status == 400) {
-                    Log.d("ThisIsATag", "Bad Request.");
-                } else if(status == 500) {
-                    Log.d("ThisIsATag", "Server Error.");
-                }
-            }
-
-            @Override
-            public void onReadCompleted(UrlRequest request, UrlResponseInfo info, ByteBuffer byteBuffer) {
-                // You should keep reading the request until there's no more data.
-                byteBuffer.clear();
-                request.read(byteBuffer);
-            }
-
-            @Override
-            public void onSucceeded(UrlRequest request, UrlResponseInfo info) {
-            }
-
-            @Override
-            public void onFailed(UrlRequest request, UrlResponseInfo info, CronetException error) {
-            }
-
-            @Override
-            public void onCanceled(UrlRequest request, UrlResponseInfo info) {
-            }
-        };
     }
 
     private void testServerConnectionOnPhone() {
