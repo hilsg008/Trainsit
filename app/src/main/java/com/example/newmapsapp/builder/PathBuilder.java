@@ -1,10 +1,12 @@
 package com.example.newmapsapp.builder;
 
-import com.example.newmapsapp.exception.PathNotFoundException;
+import android.util.Log;
+
 import com.example.newmapsapp.bottomlistable.Location;
 import com.example.newmapsapp.bottomlistable.Path;
 import com.example.newmapsapp.bottomlistable.Route;
 import com.example.newmapsapp.bottomlistable.TransferPoint;
+import com.example.newmapsapp.exception.PathNotFoundException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +21,7 @@ public class PathBuilder {
      * Uses a prebuilt list of TransferPoints from TransferPointBuilder
      */
     public PathBuilder(TransferPoint[] t) {
+        Log.d("ThisIsATag", "building paths");
         transferPoints = t;
         costFromTransferPoints = new int[transferPoints.length];
     }
