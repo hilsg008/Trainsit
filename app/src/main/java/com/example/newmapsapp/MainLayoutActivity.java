@@ -1,8 +1,12 @@
 package com.example.newmapsapp;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.os.HandlerCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.newmapsapp.bottomlistable.Location;
@@ -15,6 +19,14 @@ import com.example.newmapsapp.viewmodel.IsStartLocation;
 import com.example.newmapsapp.viewmodel.PathBuilderViewModel;
 import com.example.newmapsapp.viewmodel.RouteViewModel;
 import com.example.newmapsapp.viewmodel.StartLocationViewModel;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class MainLayoutActivity extends AppCompatActivity {
 
@@ -29,6 +41,7 @@ public class MainLayoutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         createViewModels();
+        getRoutes();
         binding = MainLayoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
     }
@@ -38,11 +51,88 @@ public class MainLayoutActivity extends AppCompatActivity {
         isStartLocation.setBool(false);
         routeViewModel = new ViewModelProvider(this).get(RouteViewModel.class);
         routeViewModel.setRoute(new Route(new Location[0]));
-        builderViewModel = new ViewModelProvider(this).get(PathBuilderViewModel.class);
-        builderViewModel.setBuilder(new PathBuilder(TransferPointBuilder.getTransferPoints(ExampleClasses.getRoutes())));
         startViewModel = new ViewModelProvider(this).get(StartLocationViewModel.class);
         startViewModel.setLocation(Location.MINNEAPOLIS);
         endViewModel = new ViewModelProvider(this).get(EndLocationViewModel.class);
         endViewModel.setLocation(Location.SAINT_PAUL);
+        builderViewModel = new ViewModelProvider(this).get(PathBuilderViewModel.class);
+        builderViewModel.setBuilder(new PathBuilder(TransferPointBuilder.getTransferPoints(ExampleClasses.getRoutes())));
+    }
+
+    private void getRoutes() {
+        Handler mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
+        RouteCollector collector = new RouteCollector(mainThreadHandler, Executors.newFixedThreadPool(1));
+        collector.getRoutesFromServer(result -> builderViewModel.setBuilder(new PathBuilder(TransferPointBuilder.getTransferPoints(result))));
+    }
+
+    interface Callback<T> {
+        void onComplete(T result);
+    }
+
+    public static class RouteCollector {
+        private final Executor collectionExecutor;
+        private final Handler resultHandler;
+
+        public RouteCollector(Handler handler, Executor readerExecutor) {
+            resultHandler = handler;
+            collectionExecutor = readerExecutor;
+        }
+
+        public void getRoutesFromServer(Callback<Route[]> callback) {
+            collectionExecutor.execute(new ServerReader(callback));
+        }
+
+        private void postRoutesBackToMain(Route[] result, Callback<Route[]> callback) {
+            resultHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onComplete(result);
+                }
+            });
+        }
+
+        private class ServerReader implements Runnable {
+            private int bytesCounted = 0;
+            private String readInfo = "";
+            private InputStream input;
+            private Callback<Route[]> resultToCallBack;
+
+            public ServerReader(Callback<Route[]> callback) {
+                resultToCallBack = callback;
+            }
+
+            @Override
+            public void run() {
+                ArrayList<Route> routes = new ArrayList<>();
+                try {
+                    Socket socket = new Socket("192.168.0.50", 6013);
+                    input = socket.getInputStream();
+                    while(bytesCounted != -1) {
+                        routes.add(new Route(getNextRouteString()));
+                    }
+                    routes.remove(routes.size()-1);
+                    postRoutesBackToMain(routes.toArray(new Route[0]), resultToCallBack);
+                } catch(IOException e) {
+                    Log.d("ThisIsATag", e.toString());
+                }
+            }
+
+            private String getNextRouteString() throws IOException {
+                byte[] buffer = new byte[100];
+                // Convert to a do - while at some point.
+                while((bytesCounted = input.read(buffer)) != -1) {
+                    readInfo += new String(buffer, StandardCharsets.UTF_8).substring(0,bytesCounted);
+                    if(readInfo.contains(";")) {
+                        int endIndex = readInfo.indexOf(";");
+                        String temp = readInfo.substring(0,endIndex);
+                        if(endIndex != readInfo.length()) {
+                            readInfo = readInfo.substring(readInfo.indexOf(";")+1);
+                        }
+                        return temp;
+                    }
+                }
+                return "";
+            }
+        }
     }
 }

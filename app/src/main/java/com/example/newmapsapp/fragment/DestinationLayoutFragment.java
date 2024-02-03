@@ -12,14 +12,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.newmapsapp.PathNotFoundException;
+import com.example.newmapsapp.exception.PathNotFoundException;
 import com.example.newmapsapp.R;
 import com.example.newmapsapp.bottomlistable.*;
 import com.example.newmapsapp.adapter.BottomListAbleAdapter;
 import com.example.newmapsapp.builder.PathBuilder;
 import com.example.newmapsapp.databinding.DestinationLayoutBinding;
 import com.example.newmapsapp.viewmodel.EndLocationViewModel;
-import com.example.newmapsapp.viewmodel.LocationViewModel;
 import com.example.newmapsapp.viewmodel.PathBuilderViewModel;
 import com.example.newmapsapp.viewmodel.StartLocationViewModel;
 

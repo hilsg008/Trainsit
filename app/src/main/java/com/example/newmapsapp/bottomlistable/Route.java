@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -15,9 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.newmapsapp.R;
 import com.example.newmapsapp.adapter.LocationAdapter;
-import com.example.newmapsapp.adapter.RouteAdapter;
-import com.example.newmapsapp.viewmodel.EndLocationViewModel;
 import com.example.newmapsapp.viewmodel.RouteViewModel;
+
+import java.util.ArrayList;
 
 public class Route extends BottomListAble {
     private Location[] stops;
@@ -120,7 +119,19 @@ public class Route extends BottomListAble {
             s+=l.toString();
             s+="\n";
         }
+        s+=routeNumber;
         return s;
+    }
+
+    public Route(String s) {
+        ArrayList<Location> locs = new ArrayList<>();
+        while(s.indexOf('\n') != -1) {
+            String temp = s.substring(0,s.indexOf('\n'));
+            s = s.substring(s.indexOf('\n')+1);
+            locs.add(new Location(temp));
+        }
+        stops = locs.toArray(new Location[0]);
+        routeNumber = s;
     }
 
     public boolean equals(Route r) {
@@ -134,5 +145,13 @@ public class Route extends BottomListAble {
             }
         }
         return true;
+    }
+
+    public boolean equalsWithName(Route r) {
+        if(this.equals(r)) {
+            return routeNumber.equals(r.getRouteNumber());
+        } else {
+            return false;
+        }
     }
 }

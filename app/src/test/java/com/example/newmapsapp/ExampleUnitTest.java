@@ -6,11 +6,19 @@ import com.example.newmapsapp.bottomlistable.Route;
 import com.example.newmapsapp.bottomlistable.TransferPoint;
 import com.example.newmapsapp.builder.PathBuilder;
 import com.example.newmapsapp.builder.TransferPointBuilder;
+import com.example.newmapsapp.exception.PathNotFoundException;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -36,11 +44,11 @@ public class ExampleUnitTest {
     public void findsClosestPoint() {
         Location[] locs = getLocations();
         TransferPoint[] points = new TransferPoint[21];
-        for(int i=0; i<21; i++) {
+        for (int i = 0; i < 21; i++) {
             points[i] = new TransferPoint(new Path(), new Path[0], locs[i].getX(), locs[i].getY());
         }
         PathBuilder builder = new PathBuilder(points);
-        Assert.assertEquals(builder.getNearestPoint(new Location(2.0f,17.8f)), 0);
+        Assert.assertEquals(builder.getNearestPoint(new Location(2.0f, 17.8f)), 0);
     }
 
     @Test
@@ -50,7 +58,7 @@ public class ExampleUnitTest {
         pointsFound = sort(pointsFound);
         Location[] locs = getCorrectSortedLocations();
         Assert.assertTrue(pointsFound.length == locs.length);
-        for(int i=0; i<pointsFound.length; i++) {
+        for (int i = 0; i < pointsFound.length; i++) {
             Assert.assertTrue(pointsFound[i].equals(locs[i]));
         }
     }
@@ -58,9 +66,9 @@ public class ExampleUnitTest {
     @Test
     public void transferPointsDoNotContainEmptyPaths() {
         TransferPoint[] points = TransferPointBuilder.getTransferPoints(getRoutes());
-        for(TransferPoint t:points) {
+        for (TransferPoint t : points) {
             Path[] paths = t.getPaths();
-            for(Path p: paths) {
+            for (Path p : paths) {
                 Assert.assertTrue(!p.getFirstPoint().equals(p.getLastPoint()));
                 Assert.assertTrue(p.isInitialized);
                 Assert.assertTrue(p.getCost() > 0);
@@ -71,14 +79,14 @@ public class ExampleUnitTest {
     @Test
     public void transferPointsContainPoints() {
         TransferPoint[] points = TransferPointBuilder.getTransferPoints(getRoutes());
-        for(TransferPoint t:points) {
+        for (TransferPoint t : points) {
             System.out.println(t);
             System.out.println(t.fromPoint());
             Path[] p = t.getPaths();
-            for(Path path:p) {
+            for (Path path : p) {
                 System.out.println(path);
                 LatLng[] latLngs = path.getPoints();
-                for(LatLng l: latLngs) {
+                for (LatLng l : latLngs) {
                     System.out.println(l);
                 }
             }
@@ -88,15 +96,15 @@ public class ExampleUnitTest {
     @Test
     public void transferPointPathsStartAndEndAtTransferPoints() {
         TransferPoint[] points = TransferPointBuilder.getTransferPoints(getRoutes());
-        for(TransferPoint t:points) {
+        for (TransferPoint t : points) {
             Path[] paths = t.getPaths();
-            for(Path p:paths) {
+            for (Path p : paths) {
                 Assert.assertTrue(p.getFirstPoint().equals(t));
                 Assert.assertTrue(!p.getLastPoint().equals(t));
                 Assert.assertTrue(p.getCost() > 0);
                 boolean inPoints = false;
-                for(TransferPoint t2:points) {
-                    if(p.getLastPoint().equals(t2)) {
+                for (TransferPoint t2 : points) {
+                    if (p.getLastPoint().equals(t2)) {
                         inPoints = true;
                     }
                 }
@@ -109,22 +117,22 @@ public class ExampleUnitTest {
     public void testTransferPoints() {
         ArrayList<Location> locs = new ArrayList<>();
         Location[] l2 = getLocations();
-        for(Location l: l2) {
+        for (Location l : l2) {
             locs.add(l);
         }
         PathBuilder p;
-        while(locs.size() > 1) {
+        while (locs.size() > 1) {
             TransferPoint[] points = TransferPointBuilder.getTransferPoints(getRoutes());
             p = new PathBuilder(points);
-            Location start = locs.remove((int)(Math.random()*locs.size()));
-            Location end = locs.remove((int)(Math.random()*locs.size()));
+            Location start = locs.remove((int) (Math.random() * locs.size()));
+            Location end = locs.remove((int) (Math.random() * locs.size()));
             System.out.println("Start: " + start + " End: " + end);
             try {
-                Path[] correctPaths = p.getPaths(start,end);
-                for(Path path: correctPaths) {
+                Path[] correctPaths = p.getPaths(start, end);
+                for (Path path : correctPaths) {
                     System.out.println("Path: " + path);
                 }
-            } catch(PathNotFoundException e) {
+            } catch (PathNotFoundException e) {
                 System.out.println(e);
             }
         }
@@ -132,17 +140,17 @@ public class ExampleUnitTest {
 
     @Test
     public void correctlySimplifyIndexes() {
-        int[] indexes = new int[]{1,2,4,5,7,8};
+        int[] indexes = new int[]{1, 2, 4, 5, 7, 8};
         Assert.assertTrue(Arrays.equals(TransferPointBuilder.simplifyIndexes(indexes), indexes));
-        indexes = new int[]{1,2,3,5,7,8,9,10};
-        Assert.assertTrue(Arrays.equals(TransferPointBuilder.simplifyIndexes(indexes), new int[]{1,3,5,7,10}));
-        indexes = new int[]{1,3,5,6,7,9,10,11,13};
-        Assert.assertTrue(Arrays.equals(TransferPointBuilder.simplifyIndexes(indexes), new int[]{1,3,5,7,9,11,13}));
+        indexes = new int[]{1, 2, 3, 5, 7, 8, 9, 10};
+        Assert.assertTrue(Arrays.equals(TransferPointBuilder.simplifyIndexes(indexes), new int[]{1, 3, 5, 7, 10}));
+        indexes = new int[]{1, 3, 5, 6, 7, 9, 10, 11, 13};
+        Assert.assertTrue(Arrays.equals(TransferPointBuilder.simplifyIndexes(indexes), new int[]{1, 3, 5, 7, 9, 11, 13}));
     }
 
     static Location[] pointsToLocs(TransferPoint[] t) {
         Location[] result = new Location[t.length];
-        for(int i=0; i<result.length; i++) {
+        for (int i = 0; i < result.length; i++) {
             result[i] = t[i].getLocation();
         }
         return result;
@@ -161,27 +169,27 @@ public class ExampleUnitTest {
 
     static Location[] getLocations() {
         Location[] locs = new Location[21];
-        locs[0] = new Location(2.1f,17.8f);
-        locs[1] = new Location(7f,20.3f);
-        locs[2] = new Location(11.5f,18.4f);
-        locs[3] = new Location(2.4f,13.3f);
-        locs[4] = new Location(6.5f,16.7f);
-        locs[5] = new Location(8f,12.3f);
-        locs[6] = new Location(13f,13f);
-        locs[7] = new Location(.3f,9.7f);
-        locs[8] = new Location(2.7f,6.8f);
-        locs[9] = new Location(.5f,2.8f);
-        locs[10] = new Location(4.1f,9.5f);
-        locs[11] = new Location(10.2f,8f);
-        locs[12] = new Location(13f,10.5f);
-        locs[13] = new Location(15.3f,10.1f);
-        locs[14] = new Location(13f,4.5f);
-        locs[15] = new Location(11.2f,2f);
-        locs[16] = new Location(7f,3.5f);
-        locs[17] = new Location(8.7f,0f);
-        locs[18] = new Location(4.7f,.5f);
-        locs[19] = new Location(0f,5.7f);
-        locs[20] = new Location(16f,6.3f);
+        locs[0] = new Location(2.1f, 17.8f);
+        locs[1] = new Location(7f, 20.3f);
+        locs[2] = new Location(11.5f, 18.4f);
+        locs[3] = new Location(2.4f, 13.3f);
+        locs[4] = new Location(6.5f, 16.7f);
+        locs[5] = new Location(8f, 12.3f);
+        locs[6] = new Location(13f, 13f);
+        locs[7] = new Location(.3f, 9.7f);
+        locs[8] = new Location(2.7f, 6.8f);
+        locs[9] = new Location(.5f, 2.8f);
+        locs[10] = new Location(4.1f, 9.5f);
+        locs[11] = new Location(10.2f, 8f);
+        locs[12] = new Location(13f, 10.5f);
+        locs[13] = new Location(15.3f, 10.1f);
+        locs[14] = new Location(13f, 4.5f);
+        locs[15] = new Location(11.2f, 2f);
+        locs[16] = new Location(7f, 3.5f);
+        locs[17] = new Location(8.7f, 0f);
+        locs[18] = new Location(4.7f, .5f);
+        locs[19] = new Location(0f, 5.7f);
+        locs[20] = new Location(16f, 6.3f);
         return locs;
     }
 
@@ -222,15 +230,154 @@ public class ExampleUnitTest {
     }
 
     static TransferPoint failPoint() {
-        return new TransferPoint(new Path(), new Path[]{new Path(new Route[][]{{new Route(new Location[]{new Location(-1, -1), new Location(-3,-1), new Location(-3, -3), new Location(-1, -3)})}})}, -1, -1);
+        return new TransferPoint(new Path(), new Path[]{new Path(new Route[][]{{new Route(new Location[]{new Location(-1, -1), new Location(-3, -1), new Location(-3, -3), new Location(-1, -3)})}})}, -1, -1);
     }
 
     @Test
     public void convertLettersToNumbers() {
         String s = "abcdefghijklmnopqrstuvwxyz";
         String wordToConvert = "pqlfeb";
-        for(char c:wordToConvert.toCharArray()) {
+        for (char c : wordToConvert.toCharArray()) {
             System.out.println(s.indexOf(c));
+        }
+    }
+
+    @Test
+    public void locationConvertsInAndOutOfString() {
+        for(int i=0; i<100; i++) {
+            Location l = new Location(Math.random(), Math.random());
+            Location l2 = new Location(l.toString());
+            Assert.assertTrue(l.equals(l2));
+        }
+        Location l = Location.ZERO;
+        Location l2 = new Location(l.toString());
+        Assert.assertTrue(l.equals(l2));
+    }
+
+    @Test
+    public void routeConvertsInAndOutOfString() {
+        for(int i=0; i<100; i++) {
+            int rand = (int)(20*Math.random());
+            Location[] locs = new Location[rand];
+            for(int j=0; j<rand;j++) {
+                locs[j] = new Location(Math.random(), Math.random());
+            }
+            Route r = new Route(locs, ""+rand);
+            Route r2 = new Route(r.toString());
+            Assert.assertTrue(r.equalsWithName(r2));
+        }
+        Route r = new Route(new Location[0]);
+        Route r2 = new Route(r.toString());
+        Assert.assertTrue(r.equals(r2));
+        r = new Route(new Location[]{Location.ZERO});
+        r2 = new Route(r.toString());
+        Assert.assertTrue(r.equals(r2));
+    }
+
+    //USES PLAIN SERVER WHICH JUST SENDS BACK BYTES RECIEVED
+    @Test
+    public void canConnectToLocalSever() {
+        String randomS = "asdfghgfdsasdfghjkkkkkjhgfdsa";
+        final int portNumber = 6013;
+        try {
+            Socket socket = new Socket("localhost", portNumber);
+            ServerReader reader = new ServerReader(socket);
+            Client writer = new ServerWriter(socket, randomS);
+
+            //Creates threads for connections
+            Thread firstThread = new Thread(reader);
+            Thread secondThread = new Thread(writer);
+
+            //Starts threads
+            firstThread.start();
+            secondThread.start();
+            firstThread.join();
+            secondThread.join();
+
+            Assert.assertEquals(reader.getResult(), randomS);
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public class Client implements Runnable {
+        InputStream input;
+        OutputStream output;
+        Socket socket;
+
+        public void run() {
+            try {
+                int inputInt;
+                while ((inputInt = input.read()) != -1) {
+                    output.write(inputInt);
+                }
+                output.flush();
+            } catch (IOException ioe) {
+                System.out.println("Threw IOE: ");
+                System.out.println(ioe);
+            }
+
+        }
+    }
+
+    public class ServerWriter extends Client {
+        public ServerWriter(Socket client, String toBePassed) {
+            try {
+                socket = client;
+                input = new ByteArrayInputStream(toBePassed.getBytes(StandardCharsets.UTF_8));
+                output = client.getOutputStream();
+            } catch (IOException ioe) {
+                System.out.println("Threw IOE: ");
+                System.out.println(ioe);
+            }
+
+        }
+
+        @Override
+        public void run() {
+            super.run();
+            try {
+                socket.shutdownOutput();
+            } catch (IOException ioe) {
+                System.out.println("Threw IOE: ");
+                System.out.println(ioe);
+            }
+        }
+    }
+
+    /*
+     * Grabbing the server's output uses
+     * InputStream as its input
+     * System.out as its output
+     */
+    public class ServerReader extends Client {
+        ByteArrayOutputStream o = new ByteArrayOutputStream(1000);
+        public ServerReader(Socket client) {
+            try {
+                socket = client;
+                input = client.getInputStream();
+                output = o;
+            } catch (IOException ioe) {
+                System.out.println("Threw IOE: ");
+                System.out.println(ioe);
+            }
+
+        }
+
+        public String getResult() {
+            return new String(o.toByteArray(), StandardCharsets.UTF_8).replaceAll("\0", "");
+        }
+
+        @Override
+        public void run() {
+            super.run();
+            try {
+                socket.close();
+            } catch (IOException ioe) {
+                System.out.println("Threw IOE: ");
+                System.out.println(ioe);
+            }
         }
     }
 }
