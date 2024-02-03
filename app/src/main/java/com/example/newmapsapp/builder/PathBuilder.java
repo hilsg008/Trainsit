@@ -1,7 +1,5 @@
 package com.example.newmapsapp.builder;
 
-import android.util.Log;
-
 import com.example.newmapsapp.bottomlistable.Location;
 import com.example.newmapsapp.bottomlistable.Path;
 import com.example.newmapsapp.bottomlistable.Route;
@@ -21,7 +19,6 @@ public class PathBuilder {
      * Uses a prebuilt list of TransferPoints from TransferPointBuilder
      */
     public PathBuilder(TransferPoint[] t) {
-        Log.d("ThisIsATag", "building paths");
         transferPoints = t;
         costFromTransferPoints = new int[transferPoints.length];
     }

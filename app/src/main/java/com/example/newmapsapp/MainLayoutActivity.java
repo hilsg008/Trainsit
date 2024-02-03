@@ -26,7 +26,6 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MainLayoutActivity extends AppCompatActivity {
@@ -41,8 +40,8 @@ public class MainLayoutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getRoutes();
         createViewModels();
+        getRoutes();
         binding = MainLayoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
     }
@@ -61,23 +60,16 @@ public class MainLayoutActivity extends AppCompatActivity {
     }
 
     private void getRoutes() {
-        ExecutorService executorService = Executors.newFixedThreadPool(4);
         Handler mainThreadHandler = HandlerCompat.createAsync(Looper.getMainLooper());
-        RouteCollector collector = new RouteCollector(mainThreadHandler, executorService);
-        collector.getRoutesFromServer(new Callback<Route[]>() {
-            @Override
-            public void onComplete(Route[] result) {
-                Log.d("ThisIsATag", "setting builder");
-                builderViewModel.setBuilder(new PathBuilder(TransferPointBuilder.getTransferPoints(result)));
-            }
-        });
+        RouteCollector collector = new RouteCollector(mainThreadHandler, Executors.newFixedThreadPool(1));
+        collector.getRoutesFromServer(result -> builderViewModel.setBuilder(new PathBuilder(TransferPointBuilder.getTransferPoints(result))));
     }
 
     interface Callback<T> {
         void onComplete(T result);
     }
 
-    public class RouteCollector {
+    public static class RouteCollector {
         private final Executor collectionExecutor;
         private final Handler resultHandler;
 
@@ -94,7 +86,6 @@ public class MainLayoutActivity extends AppCompatActivity {
             resultHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Log.d("ThisIsATag", "postingRoutes");
                     callback.onComplete(result);
                 }
             });
@@ -115,7 +106,6 @@ public class MainLayoutActivity extends AppCompatActivity {
                 ArrayList<Route> routes = new ArrayList<>();
                 try {
                     Socket socket = new Socket("192.168.0.50", 6013);
-                    Log.d("ThisIsATag", "connected");
                     input = socket.getInputStream();
                     while(bytesCounted != -1) {
                         routes.add(new Route(getNextRouteString()));
