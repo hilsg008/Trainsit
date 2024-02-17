@@ -274,6 +274,28 @@ public class ExampleUnitTest {
         Assert.assertTrue(r.equals(r2));
     }
 
+    @Test
+    public void pathsBuildInAndOutOfString() {
+        TransferPoint[] t = TransferPointBuilder.getTransferPoints(getRoutes());
+        PathBuilder p = new PathBuilder(t);
+        Location[] locs = getLocations();
+        try {
+            Path[] paths = p.getPaths(locs[15],locs[16]);
+            //Assuming that the first path produced is only 1 route long.
+            Assert.assertTrue(paths[0].pathJSON().equals(new Path(paths[0].pathJSON()).pathJSON()));
+        } catch (PathNotFoundException e) {
+            System.out.println(e);
+        }
+    }
+
+    @Test
+    public void pointsBuildInAndOutOfString() {
+        TransferPoint[] t = TransferPointBuilder.getTransferPoints(getRoutes());
+        for(TransferPoint point: t) {
+            Assert.assertTrue(point.toString().equals(new TransferPoint(point.toString()).toString()));
+        }
+    }
+
     //USES PLAIN SERVER WHICH JUST SENDS BACK BYTES RECIEVED
     @Test
     public void canConnectToLocalSever() {

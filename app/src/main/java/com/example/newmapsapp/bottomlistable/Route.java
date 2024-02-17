@@ -123,6 +123,10 @@ public class Route extends BottomListAble {
         return s;
     }
 
+    public String routeJSON() {
+        return "[" + toString().substring(0,toString().length()-(routeNumber.length()+1)) + "]";
+    }
+
     public Route(String s) {
         ArrayList<Location> locs = new ArrayList<>();
         while(s.indexOf('\n') != -1) {

@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.newmapsapp.R;
-import com.example.newmapsapp.adapter.LocationAdapter;
 import com.example.newmapsapp.adapter.RouteAdapter;
 import com.example.newmapsapp.viewmodel.RouteViewModel;
 import com.google.android.gms.maps.model.LatLng;
@@ -116,6 +115,51 @@ public class Path extends BottomListAble {
         for(Route[] r: routes) {
             s+= r[0];
         }
+        return s;
+    }
+
+    public Path(String s) {
+        this(buildStringPath(s));
+    }
+
+    private static Route[][] buildStringPath(String s) {
+        String routeArrString = s.substring(s.indexOf("Route_AA")+14, s.indexOf("}")+1);
+
+        int indexOfRoute = routeArrString.indexOf("route");
+        String namelessRouteAsString = routeArrString.substring(indexOfRoute+8, routeArrString.indexOf("]", indexOfRoute));
+
+        int indexOfNames = routeArrString.indexOf("names");
+        String namesAsString = routeArrString.substring(indexOfNames+8, routeArrString.indexOf("]",indexOfNames));
+        return new Route[][]{buildRouteArrFromStrings(namesAsString, namelessRouteAsString)};
+    }
+
+    private static Route[] buildRouteArrFromStrings(String nameString, String routeString) {
+        ArrayList<Route> routesSoFar = new ArrayList<>();
+        while(nameString.contains("\"")) {
+            int endOfName = nameString.indexOf("\"",1);
+            routesSoFar.add(new Route(routeString + "\n" + nameString.substring(1,endOfName)));
+            if(endOfName + 2 < nameString.length()) {
+                nameString = nameString.substring(endOfName+2);
+            } else {
+                nameString = "";
+            }
+        }
+        return routesSoFar.toArray(new Route[0]);
+    }
+
+    public String pathJSON() {
+        String s = "{\n\t\"Route_AA\":[";
+        for(Route[] arr: routes) {
+            s+= "\n\t\t{\n\t\t\t\"route\":" + routes[0][0].routeJSON() + ",";
+            s += "\n\t\t\t\"names\":[";
+            for(Route r: arr) {
+                s += "\"" + r.getRouteNumber() + "\",";
+            }
+            s = s.substring(0,s.length()-1);
+            s += "]\n\t\t},";
+        }
+        s = s.substring(0,s.length()-1);
+        s += "\n\t]\n}";
         return s;
     }
 
