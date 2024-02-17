@@ -88,15 +88,48 @@ public class TransferPoint extends Location implements Comparable<TransferPoint>
                 result.add(temp);
             }
         }
-        return new TransferPoint(pathToPoint, otherPaths, getX(),getY());
+        return new TransferPoint(pathToPoint, result.toArray(new Path[0]), getX(),getY());
     }
 
     private static Route[][] combine(Route[][] r1, Route[][] r2) {
-        Route[][] result = Arrays.copyOf(r1, r1.length+r2.length);
+        Route[] result = Arrays.copyOf(r1[0], r1[0].length+r2[0].length);
         for(int i=0; i<r2.length; i++) {
-            result[r1.length+i] = r2[i];
+            result[r1[0].length+i] = r2[0][i];
         }
-        return result;
+        r1[0] = removeDuplicateRoutes(result);
+        return r1;
+    }
+
+    private static Route[] removeDuplicateRoutes(Route[] arr) {
+        ArrayList<Route> result = new ArrayList<>();
+        for(Route route: arr) {
+            if(!contains(result, route)) {
+                result.add(route);
+            } else {
+                if(!result.get(indexOf(result, route)).getRouteNumber().equals(route.getRouteNumber())) {
+                    result.add(route);
+                }
+            }
+        }
+        return result.toArray(new Route[0]);
+    }
+
+    private static boolean contains(ArrayList<Route> routes, Route r) {
+        for(Route route: routes) {
+            if(route.equals(r)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static int indexOf(ArrayList<Route> routes, Route r) {
+        for(int i=0; i<routes.size(); i++) {
+            if(routes.get(i).equals(r)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     private static int getIndexInPaths(ArrayList<Path> paths, Path path) {
