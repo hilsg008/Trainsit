@@ -16,7 +16,7 @@ public class PathBuilder {
 
     /*
      * Builds a path from a location to another location.
-     * Uses a prebuilt list of TransferPoints from TransferPointBuilder
+     * Uses a prebuilt list of TransferPoints
      */
     public PathBuilder(TransferPoint[] t) {
         transferPoints = t;

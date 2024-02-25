@@ -5,9 +5,6 @@ import com.example.newmapsapp.bottomlistable.Path;
 import com.example.newmapsapp.bottomlistable.Route;
 import com.example.newmapsapp.bottomlistable.TransferPoint;
 import com.example.newmapsapp.builder.PathBuilder;
-import com.example.newmapsapp.builder.TransferPointBuilder;
-import com.example.newmapsapp.exception.PathNotFoundException;
-import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,7 +16,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -50,7 +46,7 @@ public class ExampleUnitTest {
         PathBuilder builder = new PathBuilder(points);
         Assert.assertEquals(builder.getNearestPoint(new Location(2.0f, 17.8f)), 0);
     }
-
+    /*
     @Test
     public void canBuildTransferPoints() {
         Route[] routes = getRoutes();
@@ -61,8 +57,8 @@ public class ExampleUnitTest {
         for (int i = 0; i < pointsFound.length; i++) {
             Assert.assertTrue(pointsFound[i].equals(locs[i]));
         }
-    }
-
+    }*/
+    /*
     @Test
     public void transferPointsDoNotContainEmptyPaths() {
         TransferPoint[] points = TransferPointBuilder.getTransferPoints(getRoutes());
@@ -74,8 +70,8 @@ public class ExampleUnitTest {
                 Assert.assertTrue(p.getCost() > 0);
             }
         }
-    }
-
+    }*/
+    /*
     @Test
     public void transferPointsContainPoints() {
         TransferPoint[] points = TransferPointBuilder.getTransferPoints(getRoutes());
@@ -91,8 +87,8 @@ public class ExampleUnitTest {
                 }
             }
         }
-    }
-
+    }*/
+    /*
     @Test
     public void transferPointPathsStartAndEndAtTransferPoints() {
         TransferPoint[] points = TransferPointBuilder.getTransferPoints(getRoutes());
@@ -111,8 +107,8 @@ public class ExampleUnitTest {
                 Assert.assertTrue(inPoints);
             }
         }
-    }
-
+    }*/
+    /*
     @Test
     public void testTransferPoints() {
         ArrayList<Location> locs = new ArrayList<>();
@@ -136,8 +132,8 @@ public class ExampleUnitTest {
                 System.out.println(e);
             }
         }
-    }
-
+    }*/
+    /*
     @Test
     public void correctlySimplifyIndexes() {
         int[] indexes = new int[]{1, 2, 4, 5, 7, 8};
@@ -146,7 +142,7 @@ public class ExampleUnitTest {
         Assert.assertTrue(Arrays.equals(TransferPointBuilder.simplifyIndexes(indexes), new int[]{1, 3, 5, 7, 10}));
         indexes = new int[]{1, 3, 5, 6, 7, 9, 10, 11, 13};
         Assert.assertTrue(Arrays.equals(TransferPointBuilder.simplifyIndexes(indexes), new int[]{1, 3, 5, 7, 9, 11, 13}));
-    }
+    }*/
 
     static Location[] pointsToLocs(TransferPoint[] t) {
         Location[] result = new Location[t.length];
@@ -273,6 +269,28 @@ public class ExampleUnitTest {
         r2 = new Route(r.toString());
         Assert.assertTrue(r.equals(r2));
     }
+    /*
+    @Test
+    public void pathsBuildInAndOutOfString() {
+        TransferPoint[] t = TransferPointBuilder.getTransferPoints(getRoutes());
+        PathBuilder p = new PathBuilder(t);
+        Location[] locs = getLocations();
+        try {
+            Path[] paths = p.getPaths(locs[15],locs[16]);
+            //Assuming that the first path produced is only 1 route long.
+            Assert.assertTrue(paths[0].pathJSON().equals(new Path(paths[0].pathJSON()).pathJSON()));
+        } catch (PathNotFoundException e) {
+            System.out.println(e);
+        }
+    }*/
+    /*
+    @Test
+    public void pointsBuildInAndOutOfString() {
+        TransferPoint[] t = TransferPointBuilder.getTransferPoints(getRoutes());
+        for(TransferPoint point: t) {
+            Assert.assertTrue(point.toString().equals(new TransferPoint(point.toString()).toString()));
+        }
+    }*/
 
     //USES PLAIN SERVER WHICH JUST SENDS BACK BYTES RECIEVED
     @Test

@@ -21,6 +21,32 @@ public class TransferPoint extends Location implements Comparable<TransferPoint>
         costs = new int[paths.length];
     }
 
+    public String toString() {
+        String s = "[";
+        for(Path p: paths) {
+            s += p.pathJSON() + ",\n";
+        }
+        s = s.substring(0, s.length()-2);
+        s += "]";
+        s += getLocation();
+        return s;
+    }
+
+    public TransferPoint(String s) {
+        super(s.substring(s.indexOf("]x: ")+1));
+        ArrayList<Path> pathList = new ArrayList<>();
+        while(s.contains("{")) {
+            if(s.contains("},")) {
+                pathList.add(new Path(s.substring(s.indexOf("{"),s.indexOf("},")+1)));
+                s = s.substring(s.indexOf("},")+3);
+            } else if(s.contains("}")) {
+                pathList.add(new Path(s.substring(s.indexOf("{"),s.indexOf("}]")+1)));
+                s = "";
+            }
+        }
+        paths = pathList.toArray(new Path[0]);
+    }
+
     public void initializeCosts(Location goalLocation) {
         for(int i=0; i<costs.length; i++) {
             costs[i] = costToPoint + paths[i].getCost() + paths[i].getLastPoint().getCost(goalLocation);

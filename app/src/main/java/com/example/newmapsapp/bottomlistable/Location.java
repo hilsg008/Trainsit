@@ -68,10 +68,12 @@ public class Location extends BottomListAble {
     }
 
     public Location(String s) {
-        double x = Double.parseDouble(s.substring(s.indexOf('x')+3,s.indexOf('y')-1));
-        double y = Double.parseDouble(s.substring(s.indexOf('y')+3));
-        latLng = new LatLng(y,x);
-        r = Math.sqrt(x*x+y*y);
+        if(!s.equals("")) {
+            double x = Double.parseDouble(s.substring(s.indexOf('x')+3,s.indexOf('y')-1));
+            double y = Double.parseDouble(s.substring(s.indexOf('y')+3));
+            latLng = new LatLng(y,x);
+            r = Math.sqrt(x*x+y*y);
+        }
     }
 
     public int getCost(Location l) {
